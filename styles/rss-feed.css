@@ -12,8 +12,31 @@
     list-style: none;
 }
 
+.rss-feed__items-list {
+  list-style: none;
+  padding: 0 1rem;
+}
+
+.rss-feed__items-list li {
+  border-bottom: 1px solid lightgray;
+}
+
+.rss-feed__items-list li:last-child {
+  border-bottom: none
+}
+
+.rss-feed__list-item-content {
+  display: flex;
+}
+
+.rss-feed__list-item-content a {
+  text-decoration: none;
+  color: black;
+}
+
 .accordion-header {
     margin: 0;
+    border-bottom: 1px solid black;
 }
 
 .accordion-trigger {

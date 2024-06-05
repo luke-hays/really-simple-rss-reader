@@ -26,7 +26,10 @@ const generateAccordionPanel = (id : string) => {
 
 const generateRssFeedElement = (rssFeed : RssFeed) => {
   const newRssFeed = document.createElement('li')
+
   const accordionHeader = document.createElement('h4')
+  accordionHeader.classList.add('accordion-header')
+
   const accordionTrigger = generateAccordionTrigger(rssFeed.title)
   const accordionPanel = generateAccordionPanel(rssFeed.title)
 
@@ -35,11 +38,27 @@ const generateRssFeedElement = (rssFeed : RssFeed) => {
   // Need to map each item into a list
   if (rssFeed.items.length > 0) {
     const rssFeedItemsList = document.createElement('ul')
+
+    rssFeedItemsList.classList.add('rss-feed__items-list')
+
     rssFeed.items.forEach(item => {
-      const rssFeedItemElement = document.createElement('li')
-      rssFeedItemElement.textContent = item.title
-      rssFeedItemsList.appendChild(rssFeedItemElement)
+      const rssFeedItemListContainer = document.createElement('li')
+      const rssFeedItemContent = document.createElement('div')
+      rssFeedItemContent.classList.add('rss-feed__list-item-content')
+
+      const {title, link} = item
+      const rssFeedItemTitle = document.createElement('a')
+      const rssFeedItemDescription = document.createElement('div')
+      rssFeedItemTitle.textContent = title
+      rssFeedItemTitle.setAttribute('href', link)
+      
+      rssFeedItemContent.appendChild(rssFeedItemTitle)
+      rssFeedItemContent.appendChild(rssFeedItemDescription)
+
+      rssFeedItemListContainer.appendChild(rssFeedItemContent)
+      rssFeedItemsList.appendChild(rssFeedItemListContainer)
     })
+
     accordionPanel.appendChild(rssFeedItemsList)
   }
 
