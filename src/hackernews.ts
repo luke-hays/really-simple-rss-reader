@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+const rss = `<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
 <channel>
 <title>Hacker News: Newest</title>
 <link>https://news.ycombinator.com/newest</link>
@@ -268,4 +268,6 @@
 <guid isPermaLink="false">https://news.ycombinator.com/item?id=40573033</guid>
 </item>
 </channel>
-</rss>
+</rss>`
+
+export default rss

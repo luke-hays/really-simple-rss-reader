@@ -12,6 +12,23 @@
     list-style: none;
 }
 
+.accordion-header {
+    margin: 0;
+}
+
+.accordion-trigger {
+    background-color: transparent;
+    width: 100%;
+    text-align: start;
+    border: none;
+    font: inherit;
+    font-weight: normal;
+    padding: 0 1rem;
+}
+
+/* 
+
+
 .rss-feed__list.category {
     border-bottom: 1px solid black;
     background-color: lightblue;
@@ -26,11 +43,11 @@
     padding: 0 1rem;
 }
 
-.rss--feed__accordion-header {
+.rss-feed__accordion-header {
     margin: 0;
 }
 
-.rss--feed__accordion-header button {
+.rss-feed__accordion-header button {
     background-color: transparent;
     width: 100%;
     text-align: start;
@@ -39,4 +56,4 @@
     font: inherit;
     font-weight: normal;
     padding: 0 1rem;
-}
+} */
