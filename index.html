@@ -12,16 +12,38 @@
     </head>
     <body>
       <header class="layout-header">
-          <div class="test">nesting</div>
           Really Simple Reader
       </header>
       <main class="layout-main">
-          <div class="rss-feed">
-              <button class="rss-feed__test-button">Test</button>
-          </div>
+        <div class="rss-feed">
+          <ul class="rss-feed__list category">
+            <li>
+              <h4 class="rss--feed__accordion-header">
+                <button aria-expanded="false">
+                  Category
+                </button>
+              </h4>
+              <ul class="rss-feed__list feed">
+                <li class="rss-feed_accodion-panel" hidden>
+                  <h4 class="rss--feed__accordion-header">
+                    <button aria-expanded="false">
+                      Feed
+                    </button>
+                  </h4>
+                  <div class="rss-feed_accodion-panel" hidden>
+                    <ul class="rss-feed__list item">
+                      <li>Item 1</li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </main>
       <footer class="layout-footer">
           Footer
+          <button class="rss-feed__test-button">Test</button>
       </footer>
     </body>
 </html>

@@ -1,0 +1,42 @@
+.rss-feed {
+    display: block;
+    height: 100%;
+    border: 1px solid black;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.rss-feed__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.rss-feed__list.category {
+    border-bottom: 1px solid black;
+    background-color: lightblue;
+}
+
+.rss-feed__list.feed {
+    background-color: lightcoral;
+}
+
+.rss-feed__list.item {
+    background-color: lightgoldenrodyellow;
+    padding: 0 1rem;
+}
+
+.rss--feed__accordion-header {
+    margin: 0;
+}
+
+.rss--feed__accordion-header button {
+    background-color: transparent;
+    width: 100%;
+    text-align: start;
+    border: none;
+    border-bottom: 1px solid gray;
+    font: inherit;
+    font-weight: normal;
+    padding: 0 1rem;
+}
