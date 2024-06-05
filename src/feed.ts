@@ -8,5 +8,5 @@ export const getFeed = async (url : Api['getRequest']['url']) => {
     const parser = new DOMParser()
     const parsed_text = parser.parseFromString(rss, 'application/xhtml+xml')
     // console.log(parsed_text.querySelectorAll('item'))
-    return parsed_text
+    return [parsed_text]
 }

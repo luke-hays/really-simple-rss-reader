@@ -1,43 +1,68 @@
 import {getFeed} from "./feed";
+import RssFeed from "./models/RssFeed";
 
-const feed = await getFeed('')
+const generateAccordionTrigger = (id : string) => {
+  const accordionTrigger = document.createElement('button')
 
-const feedTitle = feed.querySelector('title')?.innerHTML
-const feedLink = feed.querySelector('link')
-const feedDescription = feed.querySelector('description')
+  accordionTrigger.classList.add('accordion-trigger')
+  accordionTrigger.id = `${id}-accordion`
+  accordionTrigger.setAttribute('aria-expanded', "false")
+  accordionTrigger.setAttribute('aria-controls', id)
 
-console.log(feedTitle)
+  return accordionTrigger
+}
+
+const generateAccordionPanel = (id : string) => {
+  const accordionPanel = document.createElement('div')
+
+  accordionPanel.classList.add('accordion-panel')
+  accordionPanel.id = id
+  accordionPanel.setAttribute('aria-expanded', "false")
+  accordionPanel.setAttribute('aria-labelledby', `${id}-accordion`)
+  accordionPanel.toggleAttribute('hidden')
+  
+  return accordionPanel
+}
+
+const generateRssFeedElement = (rssFeed : RssFeed) => {
+  const newRssFeed = document.createElement('li')
+  const accordionHeader = document.createElement('h4')
+  const accordionTrigger = generateAccordionTrigger(rssFeed.title)
+  const accordionPanel = generateAccordionPanel(rssFeed.title)
+
+  accordionTrigger.textContent = rssFeed.title
+
+  // Need to map each item into a list
+  if (rssFeed.items.length > 0) {
+    const rssFeedItemsList = document.createElement('ul')
+    rssFeed.items.forEach(item => {
+      const rssFeedItemElement = document.createElement('li')
+      rssFeedItemElement.textContent = item.title
+      rssFeedItemsList.appendChild(rssFeedItemElement)
+    })
+    accordionPanel.appendChild(rssFeedItemsList)
+  }
+
+  accordionHeader.appendChild(accordionTrigger)
+  newRssFeed.appendChild(accordionHeader)
+  newRssFeed.appendChild(accordionPanel)
+
+  return newRssFeed
+}
+
+// Get a list of feeds
+
+const rssFeeds = await getFeed('')
 
 const rssFeedList = document.querySelector('.rss-feed__list')
 
+// For each feed append one of these accordion elements
 
-const newFeed = document.createElement('li')
-const accordionHeader = document.createElement('h4')
-const accordionTrigger = document.createElement('button')
-const accordionPanel = document.createElement('div')
-
-accordionHeader.classList.add('accordion-header')
-accordionTrigger.classList.add('accordion-trigger')
-accordionTrigger.id = `${feedTitle}-accordion`
-accordionTrigger.setAttribute('aria-expanded', "false")
-accordionTrigger.setAttribute('aria-controls', feedTitle)
-accordionTrigger.innerText = 'trigger'
-
-accordionPanel.classList.add('accordion-panel')
-accordionPanel.id = feedTitle
-accordionPanel.setAttribute('aria-expanded', "false")
-accordionPanel.setAttribute('aria-labelledby', `${feedTitle}-accordion`)
-accordionPanel.toggleAttribute('hidden')
-accordionPanel.innerText = 'info'
-
-accordionHeader.appendChild(accordionTrigger)
-newFeed.appendChild(accordionHeader)
-newFeed.appendChild(accordionPanel)
-
-rssFeedList?.appendChild(newFeed)
-
-console.log(rssFeedList)
-
+rssFeeds.forEach(schema => {
+  const rssFeed = new RssFeed(schema)
+  const newRssElement = generateRssFeedElement(rssFeed)
+  rssFeedList?.appendChild(newRssElement)
+})
 
 const accordionTriggers = document.querySelectorAll('.accordion-trigger')
 
