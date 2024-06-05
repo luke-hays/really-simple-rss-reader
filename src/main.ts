@@ -6,7 +6,7 @@ const generateAccordionTrigger = (id : string) => {
 
   accordionTrigger.classList.add('accordion-trigger')
   accordionTrigger.id = `${id}-accordion`
-  accordionTrigger.setAttribute('aria-expanded', "false")
+  accordionTrigger.setAttribute('aria-expanded', "true")
   accordionTrigger.setAttribute('aria-controls', id)
 
   return accordionTrigger
@@ -17,9 +17,9 @@ const generateAccordionPanel = (id : string) => {
 
   accordionPanel.classList.add('accordion-panel')
   accordionPanel.id = id
-  accordionPanel.setAttribute('aria-expanded', "false")
+  accordionPanel.setAttribute('aria-expanded', "true")
   accordionPanel.setAttribute('aria-labelledby', `${id}-accordion`)
-  accordionPanel.toggleAttribute('hidden')
+  // accordionPanel.toggleAttribute('hidden')
   
   return accordionPanel
 }

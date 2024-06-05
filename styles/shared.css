@@ -14,7 +14,7 @@ body {
     grid-template-areas: "header"
                             "main"
                             "footer";
-    grid-template-rows: 2rem auto 2rem;
+    grid-template-rows: 3rem auto 3rem;
 }
 
 .layout-header {
@@ -27,4 +27,34 @@ body {
 
 .layout-footer {
     grid-area: footer;
+}
+
+.site-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.github-link {
+  text-decoration: none;
+  border: 1px solid black;
+  padding: .25rem;
+  color: black;
+}
+
+.github-link:hover {
+  background-color: lightgrey;
+}
+
+.github-link:active {
+  background-color: darkgrey;
+  transform: scale(.97)
 }
