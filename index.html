@@ -15,8 +15,17 @@
           <div class="site-title">Really Simple(?) RSS Reader</div>
       </header>
       <main class="layout-main">
-        <div class="rss-feed">
-          <ul class="rss-feed__list"> <!-- RSS Feeds Inserted Here --> </ul>
+        <div class="content">
+          <form id="add-feed">
+            <div class="form__div">
+              <label for="rss-url-input">URL</label>
+              <input name="rss-url-input" class="rss-feed__form-input" type="url" />
+              <button type="button" class="rss-feed__form-button">Add Feed</button>
+            </div>
+          </form>
+          <div class="rss-feed">
+            <ul class="rss-feed__list"> <!-- RSS Feeds Inserted Here --> </ul>
+          </div>
         </div>
       </main>
       <footer class="layout-footer">

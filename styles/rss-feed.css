@@ -1,9 +1,53 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.form__div {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.rss-feed__form-button {
+  text-decoration: none;
+  border: 1px solid black;
+  padding: .25rem;
+  color: black;
+  background-color: transparent;
+  visibility: visible;
+}
+
+.rss-feed__form-button:hover {
+  background-color: lightgrey;
+}
+
+.rss-feed__form-button:active {
+  background-color: darkgrey;
+  transform: scale(.97)
+}
+
+.rss-feed__form-button--hidden {
+  visibility: hidden;
+}
+
+.rss-feed__form-input {
+  visibility: visible;
+}
+
+.rss-feed__form-input--hidden {
+  visibility: hidden;
+}
+
 .rss-feed {
     display: block;
     height: 100%;
     border: 1px solid black;
     border-radius: 8px;
     overflow: hidden;
+    width: 100%;
 }
 
 .rss-feed__list {
