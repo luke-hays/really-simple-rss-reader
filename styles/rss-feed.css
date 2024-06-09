@@ -29,18 +29,6 @@
   transform: scale(.97)
 }
 
-.rss-feed__form-button--hidden {
-  visibility: hidden;
-}
-
-.rss-feed__form-input {
-  visibility: visible;
-}
-
-.rss-feed__form-input--hidden {
-  visibility: hidden;
-}
-
 .rss-feed {
     display: block;
     height: 100%;
