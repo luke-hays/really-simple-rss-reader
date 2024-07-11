@@ -1,6 +1,7 @@
 import {getRequest} from "./api/api";
 import RssFeed from "./models/RssFeed";
 import CustomAccordion from "./components/accordion"
+import { postRssFeed } from "./db/rss-db";
 
 const getFeed = async (url : Api['getRequest']['url']) => {
   const feedData = await getRequest({url});
@@ -42,7 +43,7 @@ const generateRssFeedElement = (rssFeed : RssFeed) => {
   return newRssFeed
 }
 
-const handleAddFeed = async () => {
+export const addFeed = async () => {
   const rssFeedList = document.querySelector('.rss-feed__list')
 
   const input = document.getElementById('rss-url-input') as HTMLInputElement
@@ -64,6 +65,8 @@ const handleAddFeed = async () => {
 
     if (document.querySelector('parseError')) throw new Error('error parsing document')
 
+    postRssFeed(document)
+
     const rssFeed = new RssFeed(document)
     const newRssElement = generateRssFeedElement(rssFeed)
     rssFeedList?.appendChild(newRssElement)
@@ -73,8 +76,4 @@ const handleAddFeed = async () => {
   } catch (error: any) {
     console.error(error)
   }
-}
-
-export const addRssFeedEventListeners = () => {
-  document.getElementById('add-feed-button')?.addEventListener('click', handleAddFeed)
 }
