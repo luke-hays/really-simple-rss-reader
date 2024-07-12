@@ -1,9 +1,6 @@
 // import { getAllRssFeeds } from "./db/rss-db"
-// import CustomAccordion from "./components/accordion"
+import CustomAccordion from "./components/accordion"
 import {getRssFeed} from './api/rss'
-
-const document = await getRssFeed()
-console.log(document)
 
 // // const generateRssFeedElement = (rssFeed : RssFeed) => {
 // //   // const newRssFeed = document.createElement('li')
@@ -45,61 +42,32 @@ console.log(document)
 //   return text
 // }
 
-// export const addFeed = async (url) => {
-//   const rssFeedList = document.querySelector('.rss-feed__list')
 
-//   // Need a pending setting here
+const populateRssFeedList = async () => {
+  // Fetch a collection of RSS Feeds from a backend service
+  // Right now this will just be one
+  const rssFeed = await getRssFeed()
 
-//   try {
-//     new URL(url)
-//   } catch {
-//     console.error('Invalid URL') // change to show invalid status
-//     return
-//   }
+  // Need to handle possible undefined or null values
+  if (rssFeed == null) return
 
-//   try {
-//     const documentString = await getFeed(url)
-//     const parser = new DOMParser()
-//     const document = parser.parseFromString(documentString, 'application/xhtml+xml')
+  const rssFeedList = [rssFeed]
+  
+  // Grab the element responsible for rendering the list of feeds
+  const rssContainer = document.querySelector('.rss-feed__list')
 
-//     if (document.querySelector('parseError')) throw new Error('error parsing document')
+  // Loop through and append to the main list on the page
+  rssFeedList.forEach(async feed => {
+    const rss = document.createElement('li')
+    const rssItems = document.createElement('ul')
 
-//     // postRssFeed(document)
+    rss.classList.add('rss-feed__items-list')
 
-//     // const rssFeed = new RssFeed(document)
-//     // const newRssElement = generateRssFeedElement(rssFeed)
-//     // rssFeedList?.appendChild(newRssElement)
-
-//     // input.value = ''
-
-//     return document
-
-//   } catch (error: any) {
-//     console.error(error)
-//   }
-// }
-
-// const populateRssFeedList = async () => {
-//   // Fetch RssFeeds from DB
-//   const rssFeeds = await getAllRssFeeds()
-
-//   const rssContainer = document.querySelector('.rss-feed__list')
-
-//   // Loop through and append to the main list on the page
-//   rssFeeds.forEach(async feed => {
-//     const rss = document.createElement('li')
-//     rss.classList.add('rss-feed__items-list')
-
-//     const rssItems = document.createElement('ul')
+    const rssAccordion = new CustomAccordion(feed.title, rssItems, false)
     
-//     // Add items to this element
-//     const doc = await addFeed(feed.source)
-//     console.log(doc)
+    rss.appendChild(rssAccordion.accordion)
+    rssContainer?.appendChild(rss)
+  })
+}
 
-//     const rssAccordion = new CustomAccordion(feed.title, rssItems, false)
-//     rss.appendChild(rssAccordion.accordion)
-//     rssContainer?.appendChild(rss)
-//   })
-// }
-
-// await populateRssFeedList()
+await populateRssFeedList()

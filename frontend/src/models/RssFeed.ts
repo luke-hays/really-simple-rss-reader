@@ -1,24 +1,26 @@
-// const queryRssDocument = (rssFeed : Document | Element, selector : string) => rssFeed.querySelector(selector)?.textContent?.trim() ?? ''
+const queryRssDocument = (rssFeed : Document | Element, selector : string) => {
+  return rssFeed.querySelector(selector)?.textContent?.trim() ?? ''
+}
 
-// class RssFeed implements RssFeedStorage {
-//   title: string
-//   description: string
-//   link: string
-//   items : Array<RssFeedItem> = []
+class RssFeed implements RssFeedStorage {
+  title: string
+  description: string
+  source: string
+  items : Array<RssFeedItem> = []
 
-//   constructor(rssFeed: Document) {
-//     this.title = queryRssDocument(rssFeed, 'title')
-//     this.description = queryRssDocument(rssFeed, 'description')
-//     this.link = queryRssDocument(rssFeed, 'link')
+  constructor(rssFeed: Document) {
+    this.title = queryRssDocument(rssFeed, 'title')
+    this.description = queryRssDocument(rssFeed, 'description')
+    this.source = queryRssDocument(rssFeed, 'link')
 
-//     rssFeed.querySelectorAll('item').forEach(item => {
-//       this.items.push({
-//         title: queryRssDocument(item, 'title'),
-//         description: queryRssDocument(item, 'description'),
-//         link: queryRssDocument(item, 'link')
-//       })
-//     })
-//   }
-// }
+    rssFeed.querySelectorAll('item').forEach(item => {
+      this.items.push({
+        title: queryRssDocument(item, 'title'),
+        description: queryRssDocument(item, 'description'),
+        source: queryRssDocument(item, 'link')
+      })
+    })
+  }
+}
 
-// export default RssFeed
+export default RssFeed
