@@ -1,6 +1,9 @@
 // import { getAllRssFeeds } from "./db/rss-db"
 // import CustomAccordion from "./components/accordion"
-// import { getRequest } from "./api/api";
+import {getRssFeed} from './api/rss'
+
+const document = await getRssFeed()
+console.log(document)
 
 // // const generateRssFeedElement = (rssFeed : RssFeed) => {
 // //   // const newRssFeed = document.createElement('li')
