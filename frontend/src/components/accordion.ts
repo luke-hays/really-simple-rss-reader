@@ -21,6 +21,8 @@ export default class CustomAccordion {
     this.panelContent = panelContent
     this.hidden = hidden
 
+    console.log(panelContent)
+
     this
       .#createHeader()
       .#createTrigger()
