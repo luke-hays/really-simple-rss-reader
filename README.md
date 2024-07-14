@@ -4,6 +4,8 @@ Project containing both front and backend code for a web application that can re
 
 The structure of this repo is not how I would normally set up two code repos for a UI and API. This is mosty to keep conde centralized in one place for ease of reference later.
 
+This is very barebones, and not intended to be deployed in a reachable manner besides the developer on a local machine. Its just a project and motivation to dive deeper into some technical topics.
+
 ## Notes
 
 Topics to help me remember some stuff I need to dive into later.
@@ -14,8 +16,6 @@ Topics to help me remember some stuff I need to dive into later.
 - List of RSS Feeds is fetched from API
 - That list will be used to fetch latest content
 - There is a single input field to add a URL to add to the main collection
-
-This is very barebones, and not intended to be deployed in a reachable manner besides the developer on a local machine. Its just a project and motivation to dive deeper into some technical topics.
 
 ### TODO
 
