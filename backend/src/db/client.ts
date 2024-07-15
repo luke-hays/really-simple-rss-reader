@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 
-const connectionString = process.env.MONGODB_CONNECTION_STRING || "mongodb://localhost:27017";
+//  docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $INSTANCE_ID For Local
+const connectionString = process.env.MONGODB_CONNECTION_STRING || "mongodb://172.17.0.3:27017";
 
 export class Client {
   #client: MongoClient
@@ -13,8 +14,17 @@ export class Client {
     await this.#client.connect()
   }
 
-  async read(db : string, collection : string) {
-    console.log(this.#client, db, collection)
+  read({dbName, collectionName} : DbParams) {
+    const db = this.#client.db(dbName)
+    const collection = db.collection(collectionName)
+    return collection
+  }
+
+  async insertRecord({dbName, collectionName} : DbParams, record : object) {
+    const db = this.#client.db(dbName)
+    const collection = db.collection(collectionName)
+
+    return await collection.insertOne(record)
   }
 }
 

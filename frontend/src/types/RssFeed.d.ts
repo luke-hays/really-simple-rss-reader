@@ -5,8 +5,5 @@ declare interface RssFeedItem {
 }
 
 declare interface RssFeedStorage extends RssFeedItem {
-  title: string,
-  source: string,
-  description: string,
   items: Array<RssFeedItem>
 }

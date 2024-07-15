@@ -16,6 +16,8 @@ await db.init()
 // https://expressjs.com/en/resources/middleware/cors.html
 app.use(cors())
 
+app.use(express.json())
+
 // Middleware to attach the db object to every request object
 // This should make it accessible within every controller
 // types/index.d.ts has an extension to the Request interface
