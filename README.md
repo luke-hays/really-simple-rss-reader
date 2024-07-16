@@ -30,8 +30,6 @@ Topics to help me remember some stuff I need to dive into later.
 - Get this project set up so that I can easily provision and deploy to a Homelab running Proxmox as a hypervisor. UI, API, and DB will all have their own VMs
 - Add User authentication and personal lists of feeds
 
-
-
 ## Tech Stack
 
 One goal of this project was to work with minimal dependencies. Otherwise, for now, its a pretty simple Client, Server, Database architecture.
@@ -47,8 +45,9 @@ Couple more dependencies with this. TypeScript still in use, Express for ease of
 - TypeScript
 - Express
 - MongoDB Driver
+- jsdom (necessary for parsing xml)
 
-The backend is set up to encapsulate the MongoDB code so that it can be replaced easily.
+I am also using the REST Client extension on VsCode to test sending requests to the API.
 
 ### Database
 
