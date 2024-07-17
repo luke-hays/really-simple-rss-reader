@@ -1,5 +1,6 @@
 // Spec according to W3 for practice
 // This may be transformed to a web component - for right now just rely on styling outside
+// TODO Look at web component feasability
 export default class CustomAccordion {
   triggerContent : string | Node
   panelContent : string | Node

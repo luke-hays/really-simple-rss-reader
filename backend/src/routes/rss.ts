@@ -31,7 +31,8 @@ router.post('/', async (req, res, next) => {
     // Check if valid source. Insert into table if valid
     // https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
     // This is the only input provided, and in a real world scenario needs to be locked down tight
-    // Will return to this later
+    
+    // TODO Validate Source
     const source = req.body['source']
     
     // If the source looks legit, we need to fetch some data from it to add to the database, like a title and description
@@ -52,7 +53,7 @@ router.post('/', async (req, res, next) => {
 
     console.log(title, description)
 
-    // Will implement soon
+    // TODO Add insertion code
     // await req.db.insertRecord(dbConfig, {})
 
     res.send()

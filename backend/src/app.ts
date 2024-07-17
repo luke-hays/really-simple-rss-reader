@@ -27,6 +27,8 @@ app.use((req, _, next) => {
   next()
 })
 
+// TODO Add loggings
+
 routes.forEach(({path, route}) => {
   app.use(path, route)
 })

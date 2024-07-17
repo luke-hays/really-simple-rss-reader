@@ -54,7 +54,7 @@ const populateRssFeedList = async () => {
 
 await populateRssFeedList()
 
-
+// TODO Add functionality
 // export const addFeed = async () => {
 //   const rssFeedList = document.querySelector('.rss-feed__list')
 
