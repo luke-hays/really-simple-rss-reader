@@ -51,10 +51,11 @@ router.post('/', async (req, res, next) => {
     const title = document.querySelector('title')?.textContent
     const description = document.querySelector('description')?.textContent
 
-    console.log(title, description)
-
-    // TODO Add insertion code
-    // await req.db.insertRecord(dbConfig, {})
+    await req.db.insertRecord(dbConfig, {
+      source,
+      title,
+      description
+    })
 
     res.send()
   } catch (error) {
