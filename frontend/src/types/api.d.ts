@@ -1,6 +1,4 @@
-declare interface Api {
-    getRequest: {
-        path: RequestInfo | string,
-        options?: RequestInit| undefined
-    }
+declare interface ApiRequest {
+    path: RequestInfo | string,
+    options?: RequestInit | undefined,
 }

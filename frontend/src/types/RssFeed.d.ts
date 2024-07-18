@@ -1,9 +1,12 @@
-declare interface RssFeedItem {
+declare interface RssFeed {
   title: string,
   source: string,
   description: string,
 }
 
-declare interface RssFeedStorage extends RssFeedItem {
-  items: Array<RssFeedItem>
+declare interface RssFeedList extends Array<RssFeedList> {
+  title: string,
+  source: string,
+  description: string,
+  items: Array<RssFeed>
 }

@@ -20,8 +20,11 @@ router.get('/', async (req, res, next) => {
       .find()
       .toArray()
 
+    console.log(rssFeeds)
+
     res.json({rssFeeds})
   } catch (error) {
+    console.log(error)
     next(error)
   }
 })
@@ -51,13 +54,15 @@ router.post('/', async (req, res, next) => {
     const title = document.querySelector('title')?.textContent
     const description = document.querySelector('description')?.textContent
 
-    await req.db.insertRecord(dbConfig, {
+    const newRssFeed = {
       source,
       title,
       description
-    })
+    }
 
-    res.send()
+    // await req.db.insertRecord(dbConfig, newRssFeed)
+
+    res.send(newRssFeed)
   } catch (error) {
     next(error)
   }

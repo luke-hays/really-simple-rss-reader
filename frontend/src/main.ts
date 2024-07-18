@@ -1,15 +1,50 @@
 import CustomAccordion from "./components/accordion"
-import {getRssFeed} from './api/rss'
+import {getRssFeedList, addRssFeed} from './api/rss'
+
+// TODO Add functionality
+export const addFeed = async () => {
+  const input = document.getElementById('rss-url-input') as HTMLInputElement
+
+  const url = input?.value
+  // TODO Pending state
+
+  try {
+    new URL(url)
+  } catch {
+    console.error('Invalid URL') // TODO Error state
+    return
+  }
+
+  const rssFeedList = document.querySelector('.rss-feed__list')
+
+  try {
+    await addRssFeed(url)
+    // const documentString = await getFeed(url)
+    // const parser = new DOMParser()
+    // const document = parser.parseFromString(documentString, 'application/xhtml+xml')
+
+    // if (document.querySelector('parseError')) throw new Error('error parsing document')
+
+    // postRssFeed(document)
+
+    // const rssFeed = new RssFeed(document)
+    // const newRssElement = generateRssFeedElement(rssFeed)
+    // rssFeedList?.appendChild(newRssElement)
+
+    // input.value = ''
+
+  } catch (error: any) {
+    console.error(error) // TODO Error state
+  }
+}
 
 const populateRssFeedList = async () => {
   // Fetch a collection of RSS Feeds from a backend service
   // Right now this will just be one
-  const rssFeed = await getRssFeed()
+  const rssFeedList = await getRssFeedList()
 
   // Need to handle possible undefined or null values
-  if (rssFeed == null) return
-
-  const rssFeedList = [rssFeed]
+  if (rssFeedList == null) return
   
   // Grab the element responsible for rendering the list of feeds
   const rssContainer = document.querySelector('.rss-feed__list')
@@ -54,38 +89,5 @@ const populateRssFeedList = async () => {
 
 await populateRssFeedList()
 
-// TODO Add functionality
-// export const addFeed = async () => {
-//   const rssFeedList = document.querySelector('.rss-feed__list')
-
-//   const input = document.getElementById('rss-url-input') as HTMLInputElement
-
-//   const url = input?.value
-//   // Need a pending setting here
-
-//   try {
-//     new URL(url)
-//   } catch {
-//     console.error('Invalid URL') // change to show invalid status
-//     return
-//   }
-
-//   try {
-//     const documentString = await getFeed(url)
-//     const parser = new DOMParser()
-//     const document = parser.parseFromString(documentString, 'application/xhtml+xml')
-
-//     if (document.querySelector('parseError')) throw new Error('error parsing document')
-
-//     postRssFeed(document)
-
-//     const rssFeed = new RssFeed(document)
-//     const newRssElement = generateRssFeedElement(rssFeed)
-//     rssFeedList?.appendChild(newRssElement)
-
-//     input.value = ''
-
-//   } catch (error: any) {
-//     console.error(error)
-//   }
-// }
+const addRssFeedButton = document.querySelector('#add-feed-button')
+addRssFeedButton?.addEventListener('click', addFeed)

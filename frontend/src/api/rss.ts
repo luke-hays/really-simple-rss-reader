@@ -1,19 +1,28 @@
-import { getRequest } from "./api";
-import RssFeed from '../models/RssFeed'
+import { getRequest, postRequest, } from "./api";
 
-export const getRssFeed = async () => {
+// TODO Make a shared solution for catching errors
+export const getRssFeedList = async () => {
   try {
     const response = await getRequest({ path: 'rss' })
-    const documentString = await response.text()
+    const body = await response.json()
 
-    const parser = new DOMParser()
-    const document = parser.parseFromString(documentString, 'application/xhtml+xml')
+    const rssList = body.rssFeeds ?? []
 
-    if (document.querySelector('parseError')) throw new Error('parseError')
+    return rssList as RssFeedList
+  } catch (error: any) {
+    console.error(error)
+  }
+}
 
-    const rssFeed = new RssFeed(document)
+export const addRssFeed = async (rssFeedSource : string) => {
+  try {
+    const response = await postRequest({path: 'rss', options: {
+      body: JSON.stringify({source: rssFeedSource})
+    }})
 
-    return rssFeed
+    const body = await response.json()
+
+    console.log(body)
   } catch (error: any) {
     console.error(error)
   }

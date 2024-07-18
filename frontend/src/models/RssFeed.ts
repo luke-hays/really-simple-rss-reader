@@ -2,11 +2,11 @@ const queryRssDocument = (rssFeed : Document | Element, selector : string) => {
   return rssFeed.querySelector(selector)?.textContent?.trim() ?? ''
 }
 
-class RssFeed implements RssFeedStorage {
+class RssFeed implements RssFeedList {
   title: string
   description: string
   source: string
-  items : Array<RssFeedItem> = []
+  items : Array<RssFeed> = []
 
   constructor(rssFeed: Document) {
     this.title = queryRssDocument(rssFeed, 'title')
