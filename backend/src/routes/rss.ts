@@ -1,5 +1,35 @@
-import express from 'express';
+import express, { response } from 'express';
 import {JSDOM} from 'jsdom';
+
+const queryRssDocument = (rssFeed : Document | Element, selector : string) => {
+  return rssFeed.querySelector(selector)?.textContent?.trim() ?? ''
+}
+
+// Node is not going to have native browser api's to help, so we are going to rely on JSDOM
+// What we really need is the DOMParser class
+// We'll get a document we can select elements on by using the parseFromString method
+const parseRss = (rssDocString : string) => {
+  const dom = new JSDOM()
+  const parser = new dom.window.DOMParser()
+  const document = parser.parseFromString(rssDocString, 'application/xhtml+xml')
+
+  if (document.querySelector('parseError')) throw new Error('Unable to parse doc string')
+
+  const title = document.querySelector('title')?.textContent
+  const description = document.querySelector('description')?.textContent
+
+  const items : Array<{title: string, description: string, source: string}> = []
+
+  document.querySelectorAll('item').forEach(item => {
+    items.push({
+      title: queryRssDocument(item, 'title'),
+      description: queryRssDocument(item, 'description'),
+      source: queryRssDocument(item, 'link')
+    })
+  })
+
+  return {title, description, items}
+}
 
 // Can create a Router instance that can have middleware loaded and define routes
 // This can be exported and mounted on a path in our application
@@ -20,9 +50,33 @@ router.get('/', async (req, res, next) => {
       .find()
       .toArray()
 
-    console.log(rssFeeds)
+    // We want to grab  the latest content from these feeds
+    const latestRssPromises = rssFeeds.map(feed => fetch(feed.source))
+    const latestRssResponses = await Promise.allSettled(latestRssPromises)
+    
+    // Once we finish this, we need to get the text promises from our responses, or handle issues with fetching from source
+    const rssFeedStringPromises = latestRssResponses.map(resp => {
+      if (resp.status === 'fulfilled') {
+        return resp.value.text()
+      } else {
+        return Promise.reject(null)
+      }
+    })
 
-    res.json({rssFeeds})
+    const rssFeedStrings = await Promise.allSettled(rssFeedStringPromises)
+
+    // Similarly, map the results of succesful text calls by parsing them out and handling errors
+    // We can map our source for this data by simply using indices
+    const parsedRss = rssFeedStrings.map((rssTextResp, i) => {
+      if (rssTextResp.status === 'fulfilled') {
+        const rss = parseRss(rssTextResp.value)
+        return {...rss, source: rssFeeds[i].source}
+      } else {
+        return {}
+      }
+    })
+
+    res.json(parsedRss)
   } catch (error) {
     console.log(error)
     next(error)
@@ -42,27 +96,14 @@ router.post('/', async (req, res, next) => {
     const rssDoc = await fetch(source)
     const body = await rssDoc.text()
 
-    // Node is not going to have native browser api's to help, so we are going to rely on JSDOM
-    // What we really need is the DOMParser class
-    // We'll get a document we can select elements on by using the parseFromString method
-    const dom = new JSDOM()
-    const parser = new dom.window.DOMParser()
-    const document = parser.parseFromString(body, 'application/xhtml+xml')
+    const {title, description, items} = parseRss(body)
 
-    if (document.querySelector('parseError')) throw new Error('Unable to parse doc string')
+    const newRssFeed = {title, description, source}
 
-    const title = document.querySelector('title')?.textContent
-    const description = document.querySelector('description')?.textContent
+    await req.db.insertRecord(dbConfig, newRssFeed)
 
-    const newRssFeed = {
-      source,
-      title,
-      description
-    }
-
-    // await req.db.insertRecord(dbConfig, newRssFeed)
-
-    res.send(newRssFeed)
+    // We'll go ahead and send this record back so that the UI can render the new RSS Feed
+    res.send({...newRssFeed, items})
   } catch (error) {
     next(error)
   }

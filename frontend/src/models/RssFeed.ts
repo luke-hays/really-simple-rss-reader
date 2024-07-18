@@ -2,7 +2,7 @@ const queryRssDocument = (rssFeed : Document | Element, selector : string) => {
   return rssFeed.querySelector(selector)?.textContent?.trim() ?? ''
 }
 
-class RssFeed implements RssFeedList {
+class RssFeedElements {
   title: string
   description: string
   source: string
@@ -23,4 +23,4 @@ class RssFeed implements RssFeedList {
   }
 }
 
-export default RssFeed
+export default RssFeedElements

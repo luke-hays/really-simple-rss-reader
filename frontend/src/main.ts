@@ -1,8 +1,44 @@
 import CustomAccordion from "./components/accordion"
 import {getRssFeedList, addRssFeed} from './api/rss'
+import RssFeedElements from "./models/RssFeed"
 
-// TODO Add functionality
-export const addFeed = async () => {
+const generateRssFeedElement = (feed : RssFeedElements) => {
+  const rss = document.createElement('li')
+  const rssList = document.createElement('ul')
+
+  rss.classList.add('rss-feed__items-list')
+
+  // For item in each feed we need to render a list of items
+  feed.items.forEach(item => {
+    // itemList is our list element that will hold a content element
+    const itemList = document.createElement('li')
+    const itemContent = document.createElement('div')
+
+    itemContent.classList.add('rss-feed__list-item-content')
+
+    const {title, source} = item
+    const itemTitle = document.createElement('a')
+    const itemDescription = document.createElement('div')
+    
+    itemTitle.textContent = title
+    itemTitle.setAttribute('href', source)
+    
+    itemContent.appendChild(itemTitle)
+    itemContent.appendChild(itemDescription)
+
+    // We need to append the content to the new list element
+    itemList.appendChild(itemContent)
+    // Then append this list element to an unordered list of rss feeds
+    rssList.appendChild(itemList)
+  })
+
+  const rssAccordion = new CustomAccordion(feed.title, rssList, false)
+  
+  rss.appendChild(rssAccordion.accordion)
+  return rss
+}
+
+const addFeed = async () => {
   const input = document.getElementById('rss-url-input') as HTMLInputElement
 
   const url = input?.value
@@ -18,21 +54,15 @@ export const addFeed = async () => {
   const rssFeedList = document.querySelector('.rss-feed__list')
 
   try {
-    await addRssFeed(url)
-    // const documentString = await getFeed(url)
-    // const parser = new DOMParser()
-    // const document = parser.parseFromString(documentString, 'application/xhtml+xml')
+    const newRssFeed = await addRssFeed(url)
 
-    // if (document.querySelector('parseError')) throw new Error('error parsing document')
+    if (newRssFeed == null) throw new Error('handle later')
 
-    // postRssFeed(document)
+    const newRssElement = generateRssFeedElement(newRssFeed)
 
-    // const rssFeed = new RssFeed(document)
-    // const newRssElement = generateRssFeedElement(rssFeed)
-    // rssFeedList?.appendChild(newRssElement)
+    rssFeedList?.appendChild(newRssElement)
 
-    // input.value = ''
-
+    input.value = ''
   } catch (error: any) {
     console.error(error) // TODO Error state
   }
@@ -51,38 +81,7 @@ const populateRssFeedList = async () => {
 
   // Loop through and append to the main list on the page
   rssFeedList.forEach(async feed => {
-    const rss = document.createElement('li')
-    const rssList = document.createElement('ul')
-
-    rss.classList.add('rss-feed__items-list')
-
-    // For item in each feed we need to render a list of items
-    feed.items.forEach(item => {
-      // itemList is our list element that will hold a content element
-      const itemList = document.createElement('li')
-      const itemContent = document.createElement('div')
-
-      itemContent.classList.add('rss-feed__list-item-content')
-
-      const {title, source} = item
-      const itemTitle = document.createElement('a')
-      const itemDescription = document.createElement('div')
-      
-      itemTitle.textContent = title
-      itemTitle.setAttribute('href', source)
-      
-      itemContent.appendChild(itemTitle)
-      itemContent.appendChild(itemDescription)
-
-      // We need to append the content to the new list element
-      itemList.appendChild(itemContent)
-      // Then append this list element to an unordered list of rss feeds
-      rssList.appendChild(itemList)
-    })
-
-    const rssAccordion = new CustomAccordion(feed.title, rssList, false)
-    
-    rss.appendChild(rssAccordion.accordion)
+    const rss = generateRssFeedElement(feed)
     rssContainer?.appendChild(rss)
   })
 }
