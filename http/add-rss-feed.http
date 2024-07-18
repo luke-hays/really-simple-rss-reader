@@ -1,4 +1,4 @@
-POST http://localhost:3001/rss HTTP/2.0
+POST http://localhost:3000/rss HTTP/2.0
 content-type: application/json
 
 {

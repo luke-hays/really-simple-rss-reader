@@ -12,6 +12,7 @@ export class Client {
 
   async init() {
     await this.#client.connect()
+    console.log('Connected')
   }
 
   read({dbName, collectionName} : DbParams) {

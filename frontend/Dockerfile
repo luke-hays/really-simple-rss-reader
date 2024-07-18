@@ -1,9 +1,17 @@
-FROM nginx
-WORKDIR /usr/share/nginx/html
-RUN apt-get update
-RUN apt-get install npm -y
-COPY package.json .
-RUN npm i
+FROM node:22-alpine as build
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
 COPY . .
+
 RUN npm run build
-COPY dist .
+
+FROM nginx:alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80

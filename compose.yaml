@@ -1,1 +1,29 @@
-# TODO Add orchestration
+services:
+  ui:
+    build: 
+      context: ./frontend
+    ports: 
+      - 8080:80
+    depends_on:
+      - api
+
+  api:
+    build: 
+      context: ./backend
+    depends_on:
+      - database
+    environment:
+      - MONGODB_CONNECTION_STRING=mongodb://database:27017
+    ports:
+      - 127.0.0.1:3000:3000
+
+  database:
+    build: ./database
+    ports:
+      - 27017:27017
+
+# The UI ran into an issue with recognizing the service name of the API unless I made an explicit network
+# This was originally driving me crazy since the API and DB did not have this issue, and the default Docker network should be able to resolve the name
+# The following is good explanation, it was being called from the browser, not in docker, and was unable to resolve that endpoint
+# https://stackoverflow.com/questions/77060233/unknown-host-error-calling-containerized-backend-from-frontend
+# I like the suggestion of a reverse proxy as a solution, but just expose localhost for dev purposes

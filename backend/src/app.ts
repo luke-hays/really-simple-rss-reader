@@ -4,7 +4,7 @@ import routes from './routes/routes.js'
 import {Client} from './db/client.js'
 
 const app = express()
-const PORT = 3001
+const PORT = 3000
 
 // Create a database object and initialize a connection
 // Trying to keep this as encapsulated as possible

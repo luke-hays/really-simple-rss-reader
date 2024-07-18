@@ -5,5 +5,5 @@ COPY --chown=node:node package*.json ./
 USER node
 RUN npm i
 COPY --chown=node:node . .
-EXPOSE 3001
+EXPOSE 3000
 CMD ["npm", "run", "dev"]
