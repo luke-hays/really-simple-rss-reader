@@ -6,6 +6,13 @@ services:
       - 8080:80
     depends_on:
       - api
+    develop:
+      watch:
+        - action: rebuild
+          path: ./frontend/src
+          target: /frontend/src
+          ignore:
+            - node_modules/
 
   api:
     build: 
@@ -16,6 +23,13 @@ services:
       - MONGODB_CONNECTION_STRING=mongodb://database:27017
     ports:
       - 127.0.0.1:3000:3000
+    develop:
+      watch:
+        - action: rebuild
+          path: ./backend/src
+          target: /backend/src
+          ignore:
+            - node_modules/
 
   database:
     build: ./database
