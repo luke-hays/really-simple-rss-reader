@@ -1,4 +1,4 @@
-import express, { response } from 'express';
+import express from 'express';
 import {JSDOM} from 'jsdom';
 
 const queryRssDocument = (rssFeed : Document | Element, selector : string) => {

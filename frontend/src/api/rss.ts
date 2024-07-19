@@ -7,8 +7,6 @@ export const getRssFeedList = async () => {
 
     const rssList = body ?? []
 
-    console.log(rssList)
-
     return rssList as RssFeedList
   } catch (error: any) {
     console.error(error)
@@ -23,9 +21,9 @@ export const addRssFeed = async (rssFeedSource: string) => {
       }
     })
 
-    const body = await response.json()
+    const rss = await response.json()
 
-    console.log(body)
+    return rss
   } catch (error: any) {
     console.error(error)
   }
