@@ -40,4 +40,4 @@ services:
 # This was originally driving me crazy since the API and DB did not have this issue, and the default Docker network should be able to resolve the name
 # The following is good explanation, it was being called from the browser, not in docker, and was unable to resolve that endpoint
 # https://stackoverflow.com/questions/77060233/unknown-host-error-calling-containerized-backend-from-frontend
-# I like the suggestion of a reverse proxy as a solution, but just expose localhost for dev purposes
+# I like the suggestion of a reverse proxy as a solution, but for now will expose localhost on api service for dev purposes
