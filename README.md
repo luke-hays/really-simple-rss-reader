@@ -6,6 +6,12 @@ The structure of this repo is not how I would normally set up two code repos for
 
 This is very barebones, and not intended to be deployed in a reachable manner besides the developer on a local machine. Its just a project and motivation to dive deeper into some technical topics.
 
+## How do I run this?
+
+This can be run with docker. Just clone it and run `docker compose up`.
+
+UI is accessible via `localhost:8080`
+
 ## Notes
 
 Topics to help me remember some stuff I need to dive into later.
@@ -19,16 +25,20 @@ Topics to help me remember some stuff I need to dive into later.
 
 ### TODO
 
-- Functionality for retrieving the list of RSS Feeds and their Content
-- Functionality for adding a URL
-- Backend validation on adding a URL
-- Make a web component out of the Accordion in the Frontend
-- Use Orchestration to run this all at once
+#### Frontend
+- State handing (pending, error)
+- Better styling on page, including styling a web component
+
+#### Backend
+- Figure out a way to improve fetching a list of content from rss links
+- Error handling
+- Add in a rudimentary logging middleware
+- Input validation on url sent from client
 
 ### Stretch Goals
-- Might make a version where that input validation is missing or lacking and then see if I run exploits on my own project
 - Get this project set up so that I can easily provision and deploy to a Homelab running Proxmox as a hypervisor. UI, API, and DB will all have their own VMs
 - Add User authentication and personal lists of feeds
+- Add limit to how many are fetched and add pagination/sorting/filtering
 
 ## Tech Stack
 

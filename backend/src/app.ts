@@ -18,7 +18,6 @@ app.use(cors())
 
 app.use(express.json())
 
-
 // Middleware to attach the db object to every request object
 // This should make it accessible within every controller
 // types/index.d.ts has an extension to the Request interface
@@ -28,7 +27,7 @@ app.use((req, _, next) => {
   next()
 })
 
-// TODO Add loggings
+// TODO Add logging
 
 routes.forEach(({path, route}) => {
   app.use(path, route)
