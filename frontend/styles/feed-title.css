@@ -1,0 +1,29 @@
+.feed-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  padding: 1rem 0;
+  background-color: var(--footer-interactive-color);
+  color: var(--footer-button-font-color);
+  position: sticky;
+  top: 0;
+  width: 100%;
+  border: none;
+  height: 4rem;
+}
+
+.feed-title h2 {
+  margin: 0;
+}
+
+.feed-title .feed-title__directions {
+  margin: 0;
+  font-size: .625rem;
+  color: rgb(199, 199, 199);
+}
+
+.feed-title:hover {
+  cursor: pointer;
+}

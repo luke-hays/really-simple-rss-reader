@@ -8,6 +8,8 @@
       <title>Really Simple RSS Reader</title>
       <link rel="icon" href="public/vite.svg" type="image/x-icon">
       <link rel="stylesheet" href="styles/main.css" type="text/css">
+      <link rel="stylesheet" href="styles/feed-title.css" type="text/css">
+      <link rel="stylesheet" href="styles/feed-items.css" type="text/css">
       <script src="src/main.ts" type="module"></script>
       <script src="src/components/accordion.ts" type="module"></script>
     </head>
@@ -19,7 +21,18 @@
             <h1>Really Simple(?) RSS Reader</h1>
           </div>
         </header>
-        <main class="layout-main">test</main>
+        <main class="layout-main">
+          <!-- Could modify to template/slot? -->
+          <button class="feed-title">
+            <h2>Feed Title</h2>
+            <p class="feed-title__directions">Select to change or modify list</p>
+          </button>
+          <div class="feed-items empty">
+            <p>It looks like you don't currently have any feeds.</p>
+            <p>Please add an RSS Feed to get started!</p>
+            <img src="face-smile-regular.svg" id="smile-icon"/>
+          </div>
+        </main>
         <footer class="layout-footer">
           <div class="site-footer">
             <a class="github-link" href="https://github.com/luke-hays/really-simple-rss-reader">Github</a>

@@ -32,7 +32,6 @@ body {
 
 .layout-main {
   grid-area: main;
-  margin: 0 2rem;
 }
 
 .layout-footer {

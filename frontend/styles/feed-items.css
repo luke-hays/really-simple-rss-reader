@@ -1,0 +1,18 @@
+.feed-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: calc(100% - 4rem); /* We need to subtract the height of our Title in mobile */
+  padding: 2rem 0;
+}
+
+.feed-items.empty p {
+  margin: 0;
+  color: darkgray
+}
+
+#smile-icon {
+  height: 24px;
+}
