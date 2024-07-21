@@ -1,0 +1,12 @@
+:root {
+  --header-bg-color: black;
+  --header-font-color: white;
+
+  --footer-bg-color: black;
+  --footer-font-color: white;
+
+  --footer-button-font-color: white;
+  --footer-button-border: 1px solid white;
+  --footer-button-bg-color: black;
+  --footer-interactive-color: rgb(48, 48, 48)
+}
