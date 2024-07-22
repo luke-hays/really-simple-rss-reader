@@ -61,44 +61,44 @@ buildFeedMenu('Feed Title')
 // if (rssAccordionList == null) throw new Error('Unable to build RSS list')
 
 
-const buildRssAccordion = (feed : RssFeedList) => {
-  const rssAccordionListElement = document.createElement('li')
-  const rssAccordion = document.createElement('custom-accordion')
-  const rssAccordionTitle = document.createElement('div')
-  const rssAccordionContent = document.createElement('ul')
+// const buildRssAccordion = (feed : RssFeedList) => {
+//   const rssAccordionListElement = document.createElement('li')
+//   const rssAccordion = document.createElement('custom-accordion')
+//   const rssAccordionTitle = document.createElement('div')
+//   const rssAccordionContent = document.createElement('ul')
 
-  // Title and Content of accordion is dynamic
-  rssAccordionTitle.setAttribute('slot', 'accordion-trigger')
-  rssAccordionContent.setAttribute('slot', 'accordion-content')
+//   // Title and Content of accordion is dynamic
+//   rssAccordionTitle.setAttribute('slot', 'accordion-trigger')
+//   rssAccordionContent.setAttribute('slot', 'accordion-content')
 
-  rssAccordion.appendChild(rssAccordionTitle)
-  rssAccordion.appendChild(rssAccordionContent)
-  rssAccordionListElement.appendChild(rssAccordion)
+//   rssAccordion.appendChild(rssAccordionTitle)
+//   rssAccordion.appendChild(rssAccordionContent)
+//   rssAccordionListElement.appendChild(rssAccordion)
 
-  rssAccordionListElement.classList.add('rss-feed__items-list')
-  rssAccordionTitle.textContent = feed.title
+//   rssAccordionListElement.classList.add('rss-feed__items-list')
+//   rssAccordionTitle.textContent = feed.title
 
-  // For item in each feed we need to render a list of items
-  feed.items.forEach(item => {
-    const itemListElement = document.createElement('li')
-    const itemTitle = document.createElement('a')
-    const itemContent = document.createElement('div')
-    const itemDescription = document.createElement('div')
+//   // For item in each feed we need to render a list of items
+//   feed.items.forEach(item => {
+//     const itemListElement = document.createElement('li')
+//     const itemTitle = document.createElement('a')
+//     const itemContent = document.createElement('div')
+//     const itemDescription = document.createElement('div')
 
-    itemListElement.appendChild(itemContent)
-    itemContent.appendChild(itemTitle)
-    itemContent.appendChild(itemDescription)
-    rssAccordionContent.appendChild(itemListElement)
+//     itemListElement.appendChild(itemContent)
+//     itemContent.appendChild(itemTitle)
+//     itemContent.appendChild(itemDescription)
+//     rssAccordionContent.appendChild(itemListElement)
 
-    const {title, source} = item
+//     const {title, source} = item
 
-    itemContent.classList.add('rss-feed__list-item-content')
-    itemTitle.textContent = title
-    itemTitle.setAttribute('href', source)
-  })
+//     itemContent.classList.add('rss-feed__list-item-content')
+//     itemTitle.textContent = title
+//     itemTitle.setAttribute('href', source)
+//   })
 
-  return rssAccordionListElement
-}
+//   return rssAccordionListElement
+// }
 
 
 
@@ -120,9 +120,9 @@ const addFeed = async () => {
 
     if (newRssFeed == null) throw new Error('handle later')
 
-    const newRssAccordion = buildRssAccordion(newRssFeed)
+    // const newRssAccordion = buildRssAccordion(newRssFeed)
 
-    rssAccordionList.appendChild(newRssAccordion)
+    // rssAccordionList.appendChild(newRssAccordion)
 
     input.value = '' // TODO Need to clear this in more states
   } catch (error: any) {
@@ -142,6 +142,14 @@ const populateRssFeedList = async () => {
     // Fetch a collection of RSS Feeds from a backend service
     // Right now this will just be one
     const rssList = await getRssFeedList()
+    console.log(rssList)
+
+    if (rssList.length === 0) {
+      const selectedFeedError = document.createElement('selected-feed-empty')
+      selectedFeed.appendChild(selectedFeedError)
+    } else {
+
+    }
 
     // // Need to handle possible undefined or null values
     // if (rssList == null) return
@@ -154,8 +162,9 @@ const populateRssFeedList = async () => {
   } catch {
     console.error('Unable to populate RSS Feed')
     const selectedFeedError = document.createElement('selected-feed-error')
-    selectedFeed.replaceChildren(selectedFeedError)
+    selectedFeed.appendChild(selectedFeedError)
   } finally {
+    selectedFeed.removeChild(spinner)
     selectedFeed.classList.remove('selected-feed__pending')
   }
 }

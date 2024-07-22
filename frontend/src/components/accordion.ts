@@ -15,6 +15,35 @@ class CustomAccordion extends HTMLElement {
     // Create the shadow root, the custom element itself is the shadow host
     const shadow = this.attachShadow({mode: 'open'})
 
+    const styleSheet = new CSSStyleSheet()
+    styleSheet.replaceSync(`
+      .accordion-header {
+        margin: 0;
+      }
+
+      .accordion-trigger {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.125rem;
+        padding: 1rem 0;
+        background-color: var(--footer-interactive-color);
+        color: var(--footer-button-font-color);
+        position: sticky;
+        top: 0;
+        width: 100%;
+        border: none;
+        height: 4rem;
+      }
+
+      .accordion-trigger:hover {
+        cursor: pointer;
+      }
+    `)
+
+    shadow.adoptedStyleSheets = [styleSheet]
+
     const accordion = document.createElement('div')
     const header = document.createElement('h4')
     const trigger = document.createElement('button')

@@ -6,11 +6,29 @@ class SelectedFeedEmpty extends HTMLElement {
   connectedCallback() {
     const shadow = this.attachShadow({mode: 'open'})
 
-    const style = document.createElement('link')
-    style.setAttribute('rel', 'stylesheet')
-    style.setAttribute('href', '../../styles/components/selected-feed-empty.css')
+    const styleSheet = new CSSStyleSheet()
+    styleSheet.replaceSync(`
+        .selected-feed__items--empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 2rem 1rem;
+        height: 100%;
+        text-align: center;
+      }
 
-    shadow.appendChild(style)
+      .selected-feed__items--empty p {
+        margin: 0;
+      }
+
+      #smile-icon {
+        height: 24px;
+      }
+    `)
+
+    shadow.adoptedStyleSheets = [styleSheet]
 
     const container = document.createElement('div')
     const text1 = document.createElement('p')
