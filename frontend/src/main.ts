@@ -9,7 +9,7 @@ const buildFeedMenu = (title : string) => {
   const accordionTitle = document.createElement('div')
   const accordionContent = document.createElement('div')
 
-  accordion.setAttribute('stylesheet', '../styles/accordion.css')
+  accordion.setAttribute('stylesheet', '../styles/components/accordion.css')
   accordionTitle.setAttribute('slot', 'accordion-trigger')
   accordionContent.setAttribute('slot', 'accordion-content')
 
