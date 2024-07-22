@@ -1,7 +1,7 @@
 import {getRssFeedList, addRssFeed} from './api/rss'
 
 // Grab the element responsible for rendering the list of feeds
-const rssAccordionList = document.querySelector('.rss-feed__list')
+// const rssAccordionList = document.querySelector('.rss-feed__list')
 
 const buildFeedMenu = (title : string) => {
   const menu = document.querySelector('.feed-menu')
@@ -46,19 +46,19 @@ const buildFeedMenu = (title : string) => {
   feedList.appendChild(feedItem.cloneNode(true))
 }
 
-const mainLayout = document.querySelector('.layout-main')
-const selectedFeedTemplate = document.getElementById('selected-feed') as HTMLTemplateElement
-const emptyFeed = document.createElement('selected-feed-empty')
-emptyFeed.setAttribute('slot', 'selected-feed-content')
+// const mainLayout = document.querySelector('.layout-main')
+// const selectedFeedTemplate = document.getElementById('selected-feed') as HTMLTemplateElement
+// const emptyFeed = document.createElement('selected-feed-empty')
+// emptyFeed.setAttribute('slot', 'selected-feed-content')
 
-selectedFeedTemplate.appendChild(emptyFeed)
-mainLayout?.appendChild(emptyFeed)
+// selectedFeedTemplate.appendChild(emptyFeed)
+// mainLayout?.appendChild(emptyFeed)
 
 buildFeedMenu('Feed Title')
 
 // If this is removed, just crash the page.
 // Ideally we would sound an alarm immediately in an actual prod environment
-if (rssAccordionList == null) throw new Error('Unable to build RSS list')
+// if (rssAccordionList == null) throw new Error('Unable to build RSS list')
 
 
 const buildRssAccordion = (feed : RssFeedList) => {
@@ -100,20 +100,7 @@ const buildRssAccordion = (feed : RssFeedList) => {
   return rssAccordionListElement
 }
 
-const populateRssFeedList = async () => {
-  // Fetch a collection of RSS Feeds from a backend service
-  // Right now this will just be one
-  const rssList = await getRssFeedList()
 
-  // Need to handle possible undefined or null values
-  if (rssList == null) return
-
-  // Loop through and append to the main list on the page
-  rssList.forEach(async feed => {
-    const accordion = buildRssAccordion(feed)
-    rssAccordionList.appendChild(accordion)
-  })
-}
 
 const addFeed = async () => {
   const input = document.getElementById('rss-url-input') as HTMLInputElement
@@ -143,7 +130,38 @@ const addFeed = async () => {
   }
 }
 
+const populateRssFeedList = async () => {
+  // Pending
+  const selectedFeed = document.getElementById('selected-feed') as HTMLDivElement
+  const spinner = document.createElement('custom-spinner')
+
+  selectedFeed.replaceChildren(spinner)
+  selectedFeed.classList.add('selected-feed__pending')
+
+  try {
+    // Fetch a collection of RSS Feeds from a backend service
+    // Right now this will just be one
+    const rssList = await getRssFeedList()
+
+    // // Need to handle possible undefined or null values
+    // if (rssList == null) return
+
+    // // Loop through and append to the main list on the page
+    // rssList.forEach(async feed => {
+    //   const accordion = buildRssAccordion(feed)
+    //   rssAccordionList.appendChild(accordion)
+    // })
+  } catch {
+    console.error('Unable to populate RSS Feed')
+    const selectedFeedError = document.createElement('selected-feed-error')
+    selectedFeed.replaceChildren(selectedFeedError)
+  } finally {
+    selectedFeed.classList.remove('selected-feed__pending')
+  }
+}
+
 await populateRssFeedList()
+
 
 const addRssFeedButton = document.querySelector('#add-feed-button')
 addRssFeedButton?.addEventListener('click', addFeed)

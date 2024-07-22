@@ -9,7 +9,7 @@ export const getRssFeedList = async () => {
 
     return rssList as RssFeedList
   } catch (error: any) {
-    console.error(error)
+    throw error
   }
 }
 
@@ -25,6 +25,6 @@ export const addRssFeed = async (rssFeedSource: string) => {
 
     return rss
   } catch (error: any) {
-    console.error(error)
+    throw error
   }
 }

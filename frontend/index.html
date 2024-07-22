@@ -12,6 +12,7 @@
       <script src="src/components/accordion.ts" type="module"></script>
       <script src="src/components/spinner.ts" type="module"></script>
       <script src="src/components/selected-feed-empty.ts" type="module"></script>
+      <script src="src/components/selected-feed-error.ts" type="module"></script>
     </head>
     <body>
       <div class="layout">
@@ -23,9 +24,9 @@
         </header>
         <main class="layout-main">
           <div class="feed-menu"></div>
-          <template id="selected-feed">
-            <slot name="selected-feed-content"></slot>
-          </template>
+          <div id="selected-feed">
+            
+          </div>
         </main>
         <footer class="layout-footer">
           <div class="site-footer">

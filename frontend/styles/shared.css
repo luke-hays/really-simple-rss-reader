@@ -141,7 +141,24 @@ div[slot='accordion-trigger'] h2 {
   height: 100%;
 }
 
+#selected-feed {
+  height: 100%;
+}
+
+#selected-feed.selected-feed__pending {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: -1;
+}
+
 selected-feed-empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+selected-feed-error {
   height: 100%;
   display: flex;
   flex-direction: column;
