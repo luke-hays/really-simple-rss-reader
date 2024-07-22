@@ -22,7 +22,6 @@ body {
                         "main"
                         "footer";
   grid-template-rows: 5rem auto 5rem;
-  /* position: fixed; */
 }
 
 .overlay {

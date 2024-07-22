@@ -12,6 +12,7 @@
       <link rel="stylesheet" href="styles/feed-items.css" type="text/css">
       <script src="src/main.ts" type="module"></script>
       <script src="src/components/accordion.ts" type="module"></script>
+      <script src="src/components/spinner.ts" type="module"></script>
     </head>
     <body>
       <div class="layout">
@@ -22,14 +23,7 @@
           </div>
         </header>
         <main class="layout-main">
-          <!-- Could modify to template/slot? -->
-          <!-- <button class="feed-title">
-            <h2>Feed Title</h2>
-            <p class="feed-title__directions">Select to change or modify list</p>
-          </button> -->
-          <div class="feed-menu">
-            
-          </div>
+          <div class="feed-menu"></div>
           <div class="feed-items empty">
             <p>It looks like you don't currently have any feeds.</p>
             <p>Please add an RSS Feed to get started!</p>

@@ -18,16 +18,6 @@
   height: 4rem;
 }
 
-.feed-title h2 {
-  margin: 0;
-}
-
-.feed-title .feed-title__directions {
-  margin: 0;
-  font-size: .625rem;
-  color: rgb(199, 199, 199);
-}
-
 .accordion-trigger:hover {
   cursor: pointer;
 }

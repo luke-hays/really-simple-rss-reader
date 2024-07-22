@@ -3,7 +3,6 @@ import {getRssFeedList, addRssFeed} from './api/rss'
 // Grab the element responsible for rendering the list of feeds
 const rssAccordionList = document.querySelector('.rss-feed__list')
 
-
 const buildFeedMenu = (title : string) => {
   const menu = document.querySelector('.feed-menu')
   const accordion = document.createElement('custom-accordion')
