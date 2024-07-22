@@ -3,9 +3,56 @@ import {getRssFeedList, addRssFeed} from './api/rss'
 // Grab the element responsible for rendering the list of feeds
 const rssAccordionList = document.querySelector('.rss-feed__list')
 
+
+const buildFeedMenu = (title : string) => {
+  const menu = document.querySelector('.feed-menu')
+  const accordion = document.createElement('custom-accordion')
+  const accordionTitle = document.createElement('div')
+  const accordionContent = document.createElement('div')
+
+  accordion.setAttribute('stylesheet', '../styles/accordion.css')
+  accordionTitle.setAttribute('slot', 'accordion-trigger')
+  accordionContent.setAttribute('slot', 'accordion-content')
+
+  menu?.appendChild(accordion)
+  accordion.appendChild(accordionTitle)
+  accordion.appendChild(accordionContent)
+
+  const titleElement = document.createElement('h2')
+  titleElement.textContent = title
+
+  accordionTitle.appendChild(titleElement)
+
+  const feedList = document.createElement('ul')
+  const feedItem = document.createElement('li')
+
+  const feedItemContent = document.createElement('div')
+  const feedItemTitle = document.createElement('button')
+
+  feedList.classList.add('feed-list')
+  feedItem.classList.add('feed-item')
+
+  accordionContent.appendChild(feedList)
+  feedItem.appendChild(feedItemContent)
+  feedItemContent.appendChild(feedItemTitle)
+  
+  feedItemTitle.textContent = 'Sample NASA RSS Feed'
+
+  feedList.appendChild(feedItem)
+
+  feedList.appendChild(feedItem.cloneNode(true))
+  feedList.appendChild(feedItem.cloneNode(true))
+  feedList.appendChild(feedItem.cloneNode(true))
+  feedList.appendChild(feedItem.cloneNode(true))
+  feedList.appendChild(feedItem.cloneNode(true))
+}
+
+buildFeedMenu('Feed Title')
+
 // If this is removed, just crash the page.
 // Ideally we would sound an alarm immediately in an actual prod environment
 if (rssAccordionList == null) throw new Error('Unable to build RSS list')
+
 
 const buildRssAccordion = (feed : RssFeedList) => {
   const rssAccordionListElement = document.createElement('li')

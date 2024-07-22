@@ -1,4 +1,8 @@
-.feed-title {
+.accordion-header {
+  margin: 0;
+}
+
+.accordion-trigger {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,7 +28,7 @@
   color: rgb(199, 199, 199);
 }
 
-.feed-title:hover {
+.accordion-trigger:hover {
   cursor: pointer;
 }
 

@@ -1,6 +1,10 @@
 // Spec according to W3 for practice
 // Also testing out using web components with native API
 class CustomAccordion extends HTMLElement {
+  static get observedAttributes() {
+    return ['stylesheet', 'default-expand']
+  }
+
   constructor() {
     super()
   }
@@ -23,6 +27,20 @@ class CustomAccordion extends HTMLElement {
 
     const id = crypto.randomUUID()
 
+    // Apply external styles to the shadow dom
+    if (this.hasAttribute('stylesheet')) {
+      const styleLink = document.createElement('link')
+      styleLink.setAttribute('rel', 'stylesheet')
+      styleLink.setAttribute('href', this.getAttribute('stylesheet') ?? '')
+  
+      shadow.appendChild(styleLink)
+    }
+
+    let defaultExpand = 'false'
+    if (this.hasAttribute('default-expand')) {
+      defaultExpand = this.getAttribute('default-expand') ?? defaultExpand
+    }
+
     // Header
     header.classList.add('class', 'accordion-header')
 
@@ -30,7 +48,7 @@ class CustomAccordion extends HTMLElement {
     trigger.classList.add('class', 'accordion-trigger')
     trigger.id = `${id}-accordion-trigger`
     trigger.setAttribute('aria-controls', id)
-    trigger.setAttribute('aria-expanded', 'true')
+    trigger.setAttribute('aria-expanded', defaultExpand)
     trigger.innerHTML = `<slot name="accordion-trigger">Expand</slot>` // Slot is used for dynamic content
 
     trigger.addEventListener('click', () => {
@@ -52,6 +70,7 @@ class CustomAccordion extends HTMLElement {
     content.setAttribute('aria-expanded', "true")
     content.setAttribute('aria-labelledby', `${id}-accordion-trigger`)
     content.innerHTML = `<slot name="accordion-content">Test</slot>` // Slot is used for dynamic content
+    if (defaultExpand === 'false') content.toggleAttribute('hidden')
   }
 }
 
