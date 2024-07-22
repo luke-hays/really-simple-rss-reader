@@ -2,7 +2,7 @@
 // Also testing out using web components with native API
 class CustomAccordion extends HTMLElement {
   static get observedAttributes() {
-    return ['stylesheet', 'default-expand']
+    return ['data-title', 'default-expand']
   }
 
   constructor() {
@@ -55,15 +55,7 @@ class CustomAccordion extends HTMLElement {
     accordion.appendChild(content)
 
     const id = crypto.randomUUID()
-
-    // Apply external styles to the shadow dom
-    if (this.hasAttribute('stylesheet')) {
-      const styleLink = document.createElement('link')
-      styleLink.setAttribute('rel', 'stylesheet')
-      styleLink.setAttribute('href', this.getAttribute('stylesheet') ?? '')
-  
-      shadow.appendChild(styleLink)
-    }
+    const title = this.getAttribute('data-title') ?? ''
 
     let defaultExpand = 'false'
     if (this.hasAttribute('default-expand')) {
@@ -78,7 +70,7 @@ class CustomAccordion extends HTMLElement {
     trigger.id = `${id}-accordion-trigger`
     trigger.setAttribute('aria-controls', id)
     trigger.setAttribute('aria-expanded', defaultExpand)
-    trigger.innerHTML = `<slot name="accordion-trigger">Expand</slot>` // Slot is used for dynamic content
+    trigger.innerHTML = `<slot name="accordion-trigger">${title}</slot>` // Slot is used for dynamic content
 
     trigger.addEventListener('click', () => {
       const currentlyExpanded = trigger.getAttribute('aria-expanded')
@@ -100,6 +92,19 @@ class CustomAccordion extends HTMLElement {
     content.setAttribute('aria-labelledby', `${id}-accordion-trigger`)
     content.innerHTML = `<slot name="accordion-content">Test</slot>` // Slot is used for dynamic content
     if (defaultExpand === 'false') content.toggleAttribute('hidden')
+    console.log(shadow)
+
+  }
+
+  attributeChangedCallback(name: string, _ : string | null, newValue: string | null) {
+    const shadow = this.shadowRoot
+    const trigger = shadow?.querySelector('button')
+
+    console.log(shadow)
+    
+    if (trigger != null && name === 'data-title') {
+      trigger.textContent = newValue ?? ''
+    }
   }
 }
 

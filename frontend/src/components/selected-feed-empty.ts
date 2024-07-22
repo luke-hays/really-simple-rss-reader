@@ -36,8 +36,8 @@ class SelectedFeedEmpty extends HTMLElement {
     const icon = document.createElement('img')
 
     container.classList.add('selected-feed__items--empty')
-    text1.textContent = "It looks like you don't either don't currently have any feeds selected or your feed is empty."
-    text2.textContent = 'Please add an RSS Feed to get started!'
+    text1.textContent = "It looks like either your feed is empty, or you haven't added a feed."
+    text2.textContent = 'Please add an RSS Feed using the menu above to get started!'
     icon.setAttribute('src', 'face-smile-regular.svg')
     icon.setAttribute('id', 'smile-icon')
 
