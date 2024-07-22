@@ -46,6 +46,14 @@ const buildFeedMenu = (title : string) => {
   feedList.appendChild(feedItem.cloneNode(true))
 }
 
+const mainLayout = document.querySelector('.layout-main')
+const selectedFeedTemplate = document.getElementById('selected-feed') as HTMLTemplateElement
+const emptyFeed = document.createElement('selected-feed-empty')
+emptyFeed.setAttribute('slot', 'selected-feed-content')
+
+selectedFeedTemplate.appendChild(emptyFeed)
+mainLayout?.appendChild(emptyFeed)
+
 buildFeedMenu('Feed Title')
 
 // If this is removed, just crash the page.

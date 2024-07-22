@@ -8,11 +8,10 @@
       <title>Really Simple RSS Reader</title>
       <link rel="icon" href="public/vite.svg" type="image/x-icon">
       <link rel="stylesheet" href="styles/main.css" type="text/css">
-      <link rel="stylesheet" href="styles/feed-title.css" type="text/css">
-      <link rel="stylesheet" href="styles/feed-items.css" type="text/css">
       <script src="src/main.ts" type="module"></script>
       <script src="src/components/accordion.ts" type="module"></script>
       <script src="src/components/spinner.ts" type="module"></script>
+      <script src="src/components/selected-feed-empty.ts" type="module"></script>
     </head>
     <body>
       <div class="layout">
@@ -24,11 +23,9 @@
         </header>
         <main class="layout-main">
           <div class="feed-menu"></div>
-          <div class="feed-items empty">
-            <p>It looks like you don't currently have any feeds.</p>
-            <p>Please add an RSS Feed to get started!</p>
-            <img src="face-smile-regular.svg" id="smile-icon"/>
-          </div>
+          <template id="selected-feed">
+            <slot name="selected-feed-content"></slot>
+          </template>
         </main>
         <footer class="layout-footer">
           <div class="site-footer">
@@ -61,3 +58,10 @@
       </footer> -->
     </body>
 </html>
+
+
+<!-- <div class="selected-feed__items--empty">
+  <p>It looks like you don't currently have any feeds.</p>
+  <p>Please add an RSS Feed to get started!</p>
+  <img src="face-smile-regular.svg" id="smile-icon"/>
+</div> -->
