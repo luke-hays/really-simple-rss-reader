@@ -1,5 +1,6 @@
 import express from 'express';
 import {JSDOM} from 'jsdom';
+import { ObjectId } from 'mongodb';
 
 const queryRssDocument = (rssFeed : Document | Element, selector : string) => {
   return rssFeed.querySelector(selector)?.textContent?.trim() ?? ''
@@ -50,35 +51,31 @@ router.get('/', async (req, res, next) => {
       .find()
       .toArray()
 
-    // We want to grab  the latest content from these feeds
-    const latestRssPromises = rssFeeds.map(feed => fetch(feed.source))
-    const latestRssResponses = await Promise.allSettled(latestRssPromises)
-    
-    // Once we finish this, we need to get the text promises from our responses, or handle issues with fetching from source
-    const rssFeedStringPromises = latestRssResponses.map(resp => {
-      if (resp.status === 'fulfilled') {
-        return resp.value.text()
-      } else {
-        return Promise.reject(null)
-      }
-    })
-
-    const rssFeedStrings = await Promise.allSettled(rssFeedStringPromises)
-
-    // Similarly, map the results of succesful text calls by parsing them out and handling errors
-    // We can map our source for this data by simply using indices
-    const parsedRss = rssFeedStrings.map((rssTextResp, i) => {
-      if (rssTextResp.status === 'fulfilled') {
-        const rss = parseRss(rssTextResp.value)
-        return {...rss, source: rssFeeds[i].source}
-      } else {
-        return {}
-      }
-    })
-
-    res.json(parsedRss)
+    res.json(rssFeeds)
   } catch (error) {
     console.log(error)
+    next(error)
+  }
+})
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const collection = req.db.read(dbConfig)
+    const id = new ObjectId(req.params.id)
+  
+    const rss = await collection
+      .findOne({_id: id})
+  
+    if (rss == null) throw new Error('Unable to find record with id')
+
+    const rssDoc = await fetch(rss.source)
+    const body = await rssDoc.text()
+
+    const {items} = parseRss(body)
+
+    res.json(items)
+  } catch (error) {
+    console.error(error)
     next(error)
   }
 })
