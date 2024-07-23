@@ -92,16 +92,12 @@ class CustomAccordion extends HTMLElement {
     content.setAttribute('aria-labelledby', `${id}-accordion-trigger`)
     content.innerHTML = `<slot name="accordion-content">Test</slot>` // Slot is used for dynamic content
     if (defaultExpand === 'false') content.toggleAttribute('hidden')
-    console.log(shadow)
-
   }
 
   attributeChangedCallback(name: string, _ : string | null, newValue: string | null) {
     const shadow = this.shadowRoot
     const trigger = shadow?.querySelector('button')
-
-    console.log(shadow)
-    
+        
     if (trigger != null && name === 'data-title') {
       trigger.textContent = newValue ?? ''
     }
