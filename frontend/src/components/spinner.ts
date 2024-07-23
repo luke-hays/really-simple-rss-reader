@@ -6,6 +6,18 @@ class Spinner extends HTMLElement {
   connectedCallback() {
     const shadow = this.attachShadow({mode: 'open'})
 
+    const size = this.getAttribute('size')
+
+    let width = '80px'
+    let innerWidth = '64px'
+    let innerBorderSize = '8px'
+
+    if (size === 'tiny') {
+      width = '24px'
+      innerWidth = '8px'
+      innerBorderSize = '1px'
+    }
+
     const styleSheet = new CSSStyleSheet()
     styleSheet.replaceSync(`
       .lds-ring,
@@ -15,17 +27,17 @@ class Spinner extends HTMLElement {
       .lds-ring {
         display: inline-block;
         position: relative;
-        width: 80px;
-        height: 80px;
+        width: ${width};
+        height: ${width};
       }
       .lds-ring div {
         box-sizing: border-box;
         display: block;
         position: absolute;
-        width: 64px;
-        height: 64px;
+        width: ${innerWidth};
+        height: ${innerWidth};
         margin: 8px;
-        border: 8px solid currentColor;
+        border: ${innerBorderSize} solid currentColor;
         border-radius: 50%;
         animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
         border-color: currentColor transparent transparent transparent;

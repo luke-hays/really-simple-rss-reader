@@ -1,8 +1,4 @@
-import {getRssFeedList} from './api/rss'
-
-
-// // Grab the element responsible for rendering the list of feeds
-// // const rssAccordionList = document.querySelector('.rss-feed__list')
+import {getRssFeedList, addRssFeed} from './api/rss'
 
 const buildFeedMenu = (title : string) => {
   const menu = document.querySelector('.feed-menu')
@@ -10,7 +6,6 @@ const buildFeedMenu = (title : string) => {
   const accordionTitle = document.createElement('div')
   const accordionContent = document.createElement('div')
 
-  // accordion.setAttribute('stylesheet', '../styles/components/accordion.css')
   accordionTitle.setAttribute('slot', 'accordion-trigger')
   accordionContent.setAttribute('slot', 'accordion-content')
 
@@ -35,105 +30,70 @@ const buildFeedMenu = (title : string) => {
   accordionContent.appendChild(feedList)
   feedItem.appendChild(feedItemContent)
   feedItemContent.appendChild(feedItemTitle)
+
+  const addFeedForm = document.createElement('form')
+  const addFeedContainer = document.createElement('div')
+  const addFeedButton = document.createElement('button')
+  const addFeedInput = document.createElement('input')
+
+  addFeedForm.classList.add('add-feed__form')
+  addFeedContainer.classList.add('add-feed__container')
+  addFeedInput.classList.add('add-feed__input')
+  addFeedButton.classList.add('add-feed__button')
+
+  addFeedContainer.appendChild(addFeedInput)
+  addFeedContainer.appendChild(addFeedButton)
+  addFeedForm.appendChild(addFeedContainer)
+  accordionContent.appendChild(addFeedForm)
+
+  addFeedInput.placeholder = 'https://example.rss.com'
+  addFeedInput.name = 'rss-url'
+  addFeedInput.type = 'url'
+  addFeedButton.textContent = 'Add Feed'
+
+  addFeedForm.onsubmit = async (e) => {
+    e.preventDefault()
+
+    const form = document.querySelector('.add-feed__form') as HTMLFormElement
+
+    if (form == null) {
+      return
+    }
+
+    const formData = new FormData(form)
+    const url = formData.get('rss-url')
+    
+    if (url == null) {
+      return
+    }
+
+    const spinner = document.createElement('custom-spinner')
+    spinner.setAttribute('size', 'tiny')
+
+    try {
+      addFeedButton.textContent = ''
+      addFeedButton.appendChild(spinner)
+      addFeedButton.disabled = true
+      addFeedButton.classList.add('disabled')
+
+      const response = await addRssFeed(url.toString())
+
+      console.log(response)
+
+      addFeedInput.value = ''
+    } catch {
+      console.log('Error adding feed - need to implement')
+    } finally {
+      addFeedButton.textContent = 'Add Feed'
+      addFeedButton.disabled = false
+      addFeedButton.classList.remove('disabled')
+    }
+  }
   
-  feedItemTitle.textContent = 'Sample NASA RSS Feed'
-
-  feedList.appendChild(feedItem)
-
-  feedList.appendChild(feedItem.cloneNode(true))
-  feedList.appendChild(feedItem.cloneNode(true))
-  feedList.appendChild(feedItem.cloneNode(true))
-  feedList.appendChild(feedItem.cloneNode(true))
-  feedList.appendChild(feedItem.cloneNode(true))
-
   return accordion
 }
 
 const feedMenu = buildFeedMenu('Click here to get started.')
-
-
-// const mainLayout = document.querySelector('.layout-main')
-// const selectedFeedTemplate = document.getElementById('selected-feed') as HTMLTemplateElement
-// const emptyFeed = document.createElement('selected-feed-empty')
-// emptyFeed.setAttribute('slot', 'selected-feed-content')
-
-// selectedFeedTemplate.appendChild(emptyFeed)
-// mainLayout?.appendChild(emptyFeed)
-
-
-// If this is removed, just crash the page.
-// Ideally we would sound an alarm immediately in an actual prod environment
-// if (rssAccordionList == null) throw new Error('Unable to build RSS list')
-
-
-// const buildRssAccordion = (feed : RssFeedList) => {
-//   const rssAccordionListElement = document.createElement('li')
-//   const rssAccordion = document.createElement('custom-accordion')
-//   const rssAccordionTitle = document.createElement('div')
-//   const rssAccordionContent = document.createElement('ul')
-
-//   // Title and Content of accordion is dynamic
-//   rssAccordionTitle.setAttribute('slot', 'accordion-trigger')
-//   rssAccordionContent.setAttribute('slot', 'accordion-content')
-
-//   rssAccordion.appendChild(rssAccordionTitle)
-//   rssAccordion.appendChild(rssAccordionContent)
-//   rssAccordionListElement.appendChild(rssAccordion)
-
-//   rssAccordionListElement.classList.add('rss-feed__items-list')
-//   rssAccordionTitle.textContent = feed.title
-
-//   // For item in each feed we need to render a list of items
-//   feed.items.forEach(item => {
-//     const itemListElement = document.createElement('li')
-//     const itemTitle = document.createElement('a')
-//     const itemContent = document.createElement('div')
-//     const itemDescription = document.createElement('div')
-
-//     itemListElement.appendChild(itemContent)
-//     itemContent.appendChild(itemTitle)
-//     itemContent.appendChild(itemDescription)
-//     rssAccordionContent.appendChild(itemListElement)
-
-//     const {title, source} = item
-
-//     itemContent.classList.add('rss-feed__list-item-content')
-//     itemTitle.textContent = title
-//     itemTitle.setAttribute('href', source)
-//   })
-
-//   return rssAccordionListElement
-// }
-
-
-
-// const addFeed = async () => {
-//   const input = document.getElementById('rss-url-input') as HTMLInputElement
-
-//   const url = input?.value
-//   // TODO Pending state
-
-//   try {
-//     new URL(url)
-//   } catch {
-//     console.error('Invalid URL') // TODO Error state
-//     return
-//   }
-
-//   try {
-//     const newRssFeed = await addRssFeed(url)
-
-//     if (newRssFeed == null) throw new Error('handle later')
-
-//     // const newRssAccordion = buildRssAccordion(newRssFeed)
-
-//     // rssAccordionList.appendChild(newRssAccordion)
-
-//     input.value = '' // TODO Need to clear this in more states
-//   } catch (error: any) {
-//     console.error(error) // TODO Error state
-//   }
-// }
 
 const populateRssFeedList = async () => {
   const selectedFeed = document.getElementById('selected-feed') as HTMLDivElement
