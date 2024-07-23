@@ -166,10 +166,18 @@ selected-feed-error {
 
 .add-feed__container {
   display: flex;
+  flex-direction: column;
+  background-color: rgb(90, 90, 90);
+  align-items: center;
+  width: 100%;
+  padding: .5rem 0;
+}
+
+.add-feed__input-container {
+  display: flex;
   justify-content: center;
   height: 2.5rem;
   padding: 0.5rem;
-  background-color: rgb(90, 90, 90);
   gap: .5rem;
 }
 
@@ -203,4 +211,8 @@ selected-feed-error {
   cursor:wait;
   background-color: rgb(168, 111, 6);
   transform: none;
+}
+
+.add-feed__error-message {
+  color: white;
 }

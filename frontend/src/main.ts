@@ -35,14 +35,18 @@ const buildFeedMenu = (title : string) => {
   const addFeedContainer = document.createElement('div')
   const addFeedButton = document.createElement('button')
   const addFeedInput = document.createElement('input')
+  const addFeedInputContainer = document.createElement('div')
 
   addFeedForm.classList.add('add-feed__form')
   addFeedContainer.classList.add('add-feed__container')
+  addFeedInputContainer.classList.add('add-feed__input-container')
   addFeedInput.classList.add('add-feed__input')
   addFeedButton.classList.add('add-feed__button')
 
-  addFeedContainer.appendChild(addFeedInput)
-  addFeedContainer.appendChild(addFeedButton)
+  addFeedInputContainer.appendChild(addFeedInput)
+  addFeedInputContainer.appendChild(addFeedButton)
+  addFeedContainer.appendChild(addFeedInputContainer)
+
   addFeedForm.appendChild(addFeedContainer)
   accordionContent.appendChild(addFeedForm)
 
@@ -77,13 +81,32 @@ const buildFeedMenu = (title : string) => {
       addFeedButton.disabled = true
       addFeedButton.classList.add('disabled')
 
+      const error = document.getElementById('add-feed-error')
+      if (error) {
+        error.remove()
+      }
+
       const response = await addRssFeed(url.toString())
 
-      console.log(response)
+      const newFeedItem = document.createElement('li')
+      const newFeedItemButton = document.createElement('button')
+      newFeedItemButton.classList.add('feed-item')
+
+      newFeedItemButton.textContent = response.title
+      newFeedItemButton.setAttribute('data-source', response.source)
+      newFeedItem.classList.add('feed-item')
+
+      newFeedItem.appendChild(newFeedItemButton)
+      feedList.appendChild(newFeedItem)
 
       addFeedInput.value = ''
     } catch {
-      console.log('Error adding feed - need to implement')
+      // Right now, use a generic error
+      const errorContainer = document.createElement('div')
+      errorContainer.id = 'add-feed-error'
+      errorContainer.textContent = 'It looks like there was an error adding the feed.'
+      errorContainer.classList.add('add-feed__error-message')
+      addFeedContainer.appendChild(errorContainer)
     } finally {
       addFeedButton.textContent = 'Add Feed'
       addFeedButton.disabled = false
