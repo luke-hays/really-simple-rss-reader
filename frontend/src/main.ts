@@ -49,6 +49,7 @@ const buildFeedMenu = (title : string) => {
   addFeedInput.placeholder = 'https://example.rss.com'
   addFeedInput.name = 'rss-url'
   addFeedInput.type = 'url'
+  addFeedInput.required = true
   addFeedButton.textContent = 'Add Feed'
 
   addFeedForm.onsubmit = async (e) => {
