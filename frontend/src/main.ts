@@ -1,34 +1,17 @@
-import {getRssFeedList, getRssFeed, addRssFeed} from './api/rss'
-import {appendSpinner, removeSpinner, appendError, appendEmptyFeed} from './tools'
+import {getRssOptions, getRssFeed, addRssFeed} from './api/rss'
+import {
+  appendSpinner, 
+  removeSpinner, 
+  appendError, 
+  appendEmptyFeed, 
+  addSelectedFeedItems,
+  createRssOption
+} from './tools'
 
 const selectedFeed = document.getElementById('selected-feed') as HTMLDivElement
 selectedFeed.classList.add('selected-feed')
 
-const buildFeedMenu = (title : string) => {
-  const menu = document.querySelector('.feed-menu')
-  const accordion = document.createElement('custom-accordion')
-  const accordionTitle = document.createElement('div')
-  const accordionContent = document.createElement('div')
-
-  accordion.id = 'rss-accordion'
-  accordionTitle.setAttribute('slot', 'accordion-trigger')
-  accordionContent.setAttribute('slot', 'accordion-content')
-
-  menu?.appendChild(accordion)
-  accordion.appendChild(accordionTitle)
-  accordion.appendChild(accordionContent)
-
-  const titleElement = document.createElement('h2')
-  titleElement.textContent = title
-
-  accordionTitle.appendChild(titleElement)
-
-  const feedList = document.createElement('ul')
-  feedList.id = 'rss-options'
-  feedList.classList.add('feed-list')
-
-  accordionContent.appendChild(feedList)
- 
+const buildAddRssForm = (rssOptions : HTMLElement) => {
   const addFeedForm = document.createElement('form')
   const addFeedContainer = document.createElement('div')
   const addFeedButton = document.createElement('button')
@@ -46,7 +29,6 @@ const buildFeedMenu = (title : string) => {
   addFeedContainer.appendChild(addFeedInputContainer)
 
   addFeedForm.appendChild(addFeedContainer)
-  accordionContent.appendChild(addFeedForm)
 
   addFeedInput.placeholder = 'https://example.rss.com'
   addFeedInput.name = 'rss-url'
@@ -84,23 +66,14 @@ const buildFeedMenu = (title : string) => {
 
       const response = await addRssFeed(url.toString()) as RssFeedList
 
-      const newFeedItem = document.createElement('li')
-      const newFeedItemButton = document.createElement('button')
-      newFeedItemButton.classList.add('feed-item')
+      const newRssOption = createRssOption(rssOptionsMenu, selectedFeed, response)
 
-      newFeedItemButton.textContent = response.title
-      newFeedItemButton.setAttribute('data-source', response.source)
-      newFeedItem.classList.add('feed-item')
+      rssOptions.appendChild(newRssOption)
 
-      newFeedItem.appendChild(newFeedItemButton)
-      feedList.appendChild(newFeedItem)
-
-      const items = addSelectedFeedItems(response.items)
-
-      selectedFeed.replaceChildren(items)
+      addSelectedFeedItems(selectedFeed, response.items)
 
       addFeedInput.value = ''
-      feedMenu?.setAttribute('data-title', response.title)
+      rssOptionsMenu?.setAttribute('data-title', response.title)
     } catch {
       appendError(addFeedContainer, 'add-feed-error')
     } finally {
@@ -110,86 +83,76 @@ const buildFeedMenu = (title : string) => {
       removeSpinner(addFeedButton)
     }
   }
-  
-  return accordion
+
+  return addFeedForm
 }
 
-const feedMenu = buildFeedMenu('Click here to get started.')
+const buildRssOptionsMenu = (title : string) => {
+  const menu = document.querySelector('.feed-menu')
+  const accordion = document.createElement('custom-accordion')
+  const accordionTitle = document.createElement('div')
+  const accordionContent = document.createElement('div')
 
-const addSelectedFeedItems = (rssFeed : Array<RssFeed>) => {
-  // Iterate over items, render in the Selected Feed List
-  const itemContainer = document.createElement('ul')
+  accordion.id = 'rss-accordion'
+  accordionTitle.setAttribute('slot', 'accordion-trigger')
+  accordionContent.setAttribute('slot', 'accordion-content')
 
-  const items = rssFeed.map(item => {
-    const listItem = document.createElement('li')
-    const listItemLink = document.createElement('a')
-    const container = document.createElement('div')
+  if (menu == null) throw new Error()
 
-    listItem.appendChild(listItemLink)
-    listItemLink.appendChild(container)
+  menu.appendChild(accordion)
+  accordion.appendChild(accordionTitle)
+  accordion.appendChild(accordionContent)
 
-    listItemLink.href = item.source
-    listItemLink.target = '_blank'
-    listItemLink.rel = 'noopener noreferrer'
-    listItemLink.classList.add('feed-item__link')
+  const titleElement = document.createElement('h2')
+  titleElement.textContent = title
 
-    container.textContent = item.title
-    container.classList.add('feed-item__link-container')
+  accordionTitle.appendChild(titleElement)
 
-    return listItem
-  })
-  
-  itemContainer.replaceChildren(...items)
+  const rssOptions = document.createElement('ul')
+  rssOptions.id = 'rss-options'
+  rssOptions.classList.add('feed-list')
 
-  return itemContainer
+  const form = buildAddRssForm(rssOptions)
+
+  accordionContent.appendChild(rssOptions)
+  accordionContent.appendChild(form)
+
+  return accordion
 }
 
 const addRssOptions = (items: Array<RssFeed>) => {
   const rssOptions = document.getElementById('rss-options')
 
+  if (rssOptions == null) throw new Error()
+
   items.forEach(item => {
-    const rssOption = document.createElement('li')
-    const rssOptionControl = document.createElement('button')
-
-    rssOptionControl.onclick = async () => {
-      const items = await getRssFeed(item._id)
-      const itemsList = addSelectedFeedItems(items)
-      selectedFeed.replaceChildren(itemsList) 
-      feedMenu?.setAttribute('data-title', item.title)
-
-    }
-
-    rssOption.classList.add('feed-item')
-
-    rssOptionControl.textContent = item.title
-
-    rssOption.appendChild(rssOptionControl)
-    rssOptions?.appendChild(rssOption)
+    const rssOption = createRssOption(rssOptionsMenu, selectedFeed, item)
+    rssOptions.appendChild(rssOption)
   })
 }
 
-const populateRssMenuOptions = async () => {
+const getRssMenuOptions = async () => {
   appendSpinner(selectedFeed)
     
   try {
     // Fetch a collection of RSS Feeds from a backend service - this should be changed to one
-    const rssList = await getRssFeedList()
+    const rssOptions = await getRssOptions()
 
-    if (rssList.length === 0) {
+    if (rssOptions.length === 0) {
       appendEmptyFeed(selectedFeed)
     } else {
-      addRssOptions(rssList)
-      // At this point, just use the first as the default
-      const defaultRssFeed = rssList[0]
-      const items = await getRssFeed(defaultRssFeed._id)
+      addRssOptions(rssOptions)
 
-      feedMenu?.setAttribute('data-title', defaultRssFeed.title)
+      // At this point, just use the first as the default
+      const defaultRssOption = rssOptions[0]
+      const items = await getRssFeed(defaultRssOption._id)
+
+      rssOptionsMenu.setAttribute('data-title', defaultRssOption.title)
 
       if (items.length === 0) {
         appendEmptyFeed(selectedFeed)
       } else {
-        const itemsList = addSelectedFeedItems(items)
-        selectedFeed.appendChild(itemsList)
+        addSelectedFeedItems(selectedFeed, items)
       }
     }
   } catch {
@@ -199,4 +162,5 @@ const populateRssMenuOptions = async () => {
   }
 }
 
-populateRssMenuOptions()
+const rssOptionsMenu = buildRssOptionsMenu('Click here to get started.')
+getRssMenuOptions()

@@ -2,7 +2,7 @@ import {getRequest, postRequest} from "./api";
 
 const BASE_PATH = 'rss'
 
-export const getRssFeedList = async () => {
+export const getRssOptions = async () => {
   try {
     const response = await getRequest({ path: BASE_PATH })
     const body = await response.json()
