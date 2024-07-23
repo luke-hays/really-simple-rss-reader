@@ -1,5 +1,34 @@
 import {getRssFeedList, addRssFeed} from './api/rss'
 
+const selectedFeed = document.getElementById('selected-feed') as HTMLDivElement
+
+const addSelectedFeedItems = (rssFeed : RssFeedList) => {
+  // Iterate over items, render in the Selected Feed List
+  const itemContainer = document.createElement('ul')
+
+  const items = rssFeed.items.map(item => {
+    const listItem = document.createElement('li')
+    const listItemLink = document.createElement('a')
+    const container = document.createElement('div')
+
+    listItem.appendChild(listItemLink)
+    listItemLink.appendChild(container)
+
+    listItemLink.href = item.source
+    listItemLink.target = '_blank'
+    listItemLink.rel = 'noopener noreferrer'
+    listItemLink.classList.add('feed-item__link')
+
+    container.textContent = item.title
+    container.classList.add('feed-item__link-container')
+
+    return listItem
+  })
+  
+  itemContainer.replaceChildren(...items)
+  return itemContainer
+}
+
 const buildFeedMenu = (title : string) => {
   const menu = document.querySelector('.feed-menu')
   const accordion = document.createElement('custom-accordion')
@@ -99,6 +128,10 @@ const buildFeedMenu = (title : string) => {
       newFeedItem.appendChild(newFeedItemButton)
       feedList.appendChild(newFeedItem)
 
+      const items = addSelectedFeedItems(response)
+
+      selectedFeed.replaceChildren(items)
+
       addFeedInput.value = ''
     } catch {
       // Right now, use a generic error
@@ -120,13 +153,12 @@ const buildFeedMenu = (title : string) => {
 const feedMenu = buildFeedMenu('Click here to get started.')
 
 const populateRssFeedList = async () => {
-  const selectedFeed = document.getElementById('selected-feed') as HTMLDivElement
   const selectedFeedEmpty = document.createElement('selected-feed-empty')
 
   const spinner = document.createElement('custom-spinner')
   
   selectedFeed.appendChild(spinner)
-  selectedFeed.classList.add('selected-feed__pending')
+  selectedFeed.classList.add('selected-feed', 'selected-feed__pending')
 
   try {
     // Fetch a collection of RSS Feeds from a backend service - this should be changed to one
@@ -134,39 +166,24 @@ const populateRssFeedList = async () => {
     console.log(rssList)
 
     if (rssList.length === 0) {
-      selectedFeed.appendChild(selectedFeedEmpty)
+      selectedFeed.replaceChildren(selectedFeedEmpty)
     } else {
       // At this point, just use the first as the default
       const defaultRssFeed = rssList[0]
       feedMenu.setAttribute('data-title', defaultRssFeed.title)
 
       if (defaultRssFeed.items.length === 0) {
-        selectedFeed.appendChild(selectedFeedEmpty)
+        selectedFeed.replaceChildren(selectedFeedEmpty)
       } else {
-        // Iterate over items, render in the Selected Feed List
-        const itemContainer = document.createElement('div')
-
-        const items = defaultRssFeed.items.map(item => {
-          const listItem = document.createElement('li')
-          const listItemLink = document.createElement('a')
-          
-          listItem.appendChild(listItemLink)
-          listItemLink.setAttribute('href', item.source)
-          listItemLink.textContent = item.title
-
-          return listItem
-        })
-        
-        itemContainer.replaceChildren(...items)
-        selectedFeed.appendChild(itemContainer)
+        const items = addSelectedFeedItems(defaultRssFeed)
+        selectedFeed.replaceChildren(items)
       }
     }
   } catch {
     console.error('Unable to populate RSS Feed')
     const selectedFeedError = document.createElement('selected-feed-error')
-    selectedFeed.appendChild(selectedFeedError)
+    selectedFeed.replaceChildren(selectedFeedError)
   } finally {
-    selectedFeed.removeChild(spinner)
     selectedFeed.classList.remove('selected-feed__pending')
   }
 }
