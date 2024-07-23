@@ -145,7 +145,7 @@ div[slot='accordion-trigger'] h2 {
   height: 100%;
 }
 
-#selected-feed.selected-feed__pending {
+#selected-feed.pending {
   display: flex;
   justify-content: center;
   align-items: center;

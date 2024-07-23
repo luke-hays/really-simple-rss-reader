@@ -1,4 +1,5 @@
 import {getRssFeedList, getRssFeed, addRssFeed} from './api/rss'
+import {appendSpinner, removeSpinner, appendError, appendEmptyFeed} from './tools'
 
 const selectedFeed = document.getElementById('selected-feed') as HTMLDivElement
 selectedFeed.classList.add('selected-feed')
@@ -69,14 +70,11 @@ const buildFeedMenu = (title : string) => {
       return
     }
 
-    const spinner = document.createElement('custom-spinner')
-    spinner.setAttribute('size', 'tiny')
-
     try {
       addFeedButton.textContent = ''
-      addFeedButton.appendChild(spinner)
       addFeedButton.disabled = true
       addFeedButton.classList.add('disabled')
+      appendSpinner(addFeedButton, {size: 'tiny'})
 
       const error = document.getElementById('add-feed-error')
 
@@ -104,16 +102,12 @@ const buildFeedMenu = (title : string) => {
       addFeedInput.value = ''
       feedMenu?.setAttribute('data-title', response.title)
     } catch {
-      // Right now, use a generic error
-      const errorContainer = document.createElement('div')
-      errorContainer.id = 'add-feed-error'
-      errorContainer.textContent = 'It looks like there was an error adding the feed.'
-      errorContainer.classList.add('add-feed__error-message')
-      addFeedContainer.appendChild(errorContainer)
+      appendError(addFeedContainer, 'add-feed-error')
     } finally {
       addFeedButton.textContent = 'Add Feed'
       addFeedButton.disabled = false
       addFeedButton.classList.remove('disabled')
+      removeSpinner(addFeedButton)
     }
   }
   
@@ -175,18 +169,14 @@ const addRssOptions = (items: Array<RssFeed>) => {
 }
 
 const populateRssMenuOptions = async () => {
-  const selectedFeedEmpty = document.createElement('selected-feed-empty')
-  const spinner = document.createElement('custom-spinner')
-  
-  selectedFeed.appendChild(spinner)
-  selectedFeed.classList.add('selected-feed__pending')
-
+  appendSpinner(selectedFeed)
+    
   try {
     // Fetch a collection of RSS Feeds from a backend service - this should be changed to one
     const rssList = await getRssFeedList()
 
     if (rssList.length === 0) {
-      selectedFeed.replaceChildren(selectedFeedEmpty)
+      appendEmptyFeed(selectedFeed)
     } else {
       addRssOptions(rssList)
       // At this point, just use the first as the default
@@ -196,45 +186,17 @@ const populateRssMenuOptions = async () => {
       feedMenu?.setAttribute('data-title', defaultRssFeed.title)
 
       if (items.length === 0) {
-        selectedFeed.replaceChildren(selectedFeedEmpty)
+        appendEmptyFeed(selectedFeed)
       } else {
         const itemsList = addSelectedFeedItems(items)
-        selectedFeed.replaceChildren(itemsList)
+        selectedFeed.appendChild(itemsList)
       }
     }
   } catch {
-    console.error('Unable to populate RSS Feed')
-    const selectedFeedError = document.createElement('selected-feed-error')
-    selectedFeed.replaceChildren(selectedFeedError)
+    appendError(selectedFeed, 'selected-feed-error')
   } finally {
-    selectedFeed.classList.remove('selected-feed__pending')
+    removeSpinner(selectedFeed)
   }
 }
 
 populateRssMenuOptions()
-
-
-
-// const getRssFeedContent = async (source : string) => {
-//   const selectedFeedEmpty = document.createElement('selected-feed-empty')
-//   const spinner = document.createElement('custom-spinner')
-  
-//   selectedFeed.replaceChildren(spinner) // Set a pending icon
-//   selectedFeed.classList.add('selected-feed__pending')
-
-//   try {
-//     const items = await getRssFeed(source)
-//     if (items.length === 0) {
-//       selectedFeed.replaceChildren(selectedFeedEmpty)
-//     } else {
-//       const itemNodes = addSelectedFeedItems(items)
-//       selectedFeed.replaceChildren(itemNodes)
-//     }
-//   } catch {
-//     console.error('Unable to populate RSS Feed')
-//     const selectedFeedError = document.createElement('selected-feed-error')
-//     selectedFeed.replaceChildren(selectedFeedError)
-//   } finally {
-//     selectedFeed.classList.remove('selected-feed__pending')
-//   }
-// }
