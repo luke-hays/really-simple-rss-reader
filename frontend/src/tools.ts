@@ -63,9 +63,16 @@ export const addSelectedFeedItems = (parent : HTMLElement, items : Array<RssFeed
 
 export const createRssOption = (rssMenu : HTMLElement, selectedFeed : HTMLElement, item : RssFeed) => {
   const rssOption = document.createElement('li')
+  const rssOptionContainer = document.createElement('div')
   const rssOptionControl = document.createElement('button')
+  const rssDeleteButton = document.createElement('button')
 
+  rssOption.id = item._id
   rssOption.classList.add('feed-item')
+  rssOptionContainer.classList.add('rss-option')
+
+  /* Set selected feed */
+  rssOptionControl.classList.add('rss-set-option')
   rssOptionControl.textContent = item.title
   rssOptionControl.setAttribute('data-source', item.source)
 
@@ -75,6 +82,17 @@ export const createRssOption = (rssMenu : HTMLElement, selectedFeed : HTMLElemen
     rssMenu.setAttribute('data-title', item.title)
   }
 
-  rssOption.appendChild(rssOptionControl)
+  /* Delete */
+  const rssDeleteButtonIcon = document.createElement('img')
+  rssDeleteButtonIcon.src = 'trash-solid.svg'
+  rssDeleteButtonIcon.classList.add('rss-delete-option__icon')
+
+  rssDeleteButton.classList.add('rss-delete-option')
+  rssDeleteButton.appendChild(rssDeleteButtonIcon)
+
+  rssOptionContainer.appendChild(rssOptionControl)
+  rssOptionContainer.appendChild(rssDeleteButton)
+  rssOption.appendChild(rssOptionContainer)
+
   return rssOption
 }

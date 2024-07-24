@@ -17,4 +17,4 @@ content-type: application/json
 
 ### Delete an RSS feed from db
 
-DELETE http://localhost:3000/rss/66a0170dce04dbb45e468c0e HTTP/2.0
+DELETE http://localhost:3000/rss/66a07ef474d7fc2d4c85ed27 HTTP/2.0
