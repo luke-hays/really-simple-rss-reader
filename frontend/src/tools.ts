@@ -96,21 +96,30 @@ export const createRssOption = (rssMenu : HTMLElement, selectedFeed : HTMLElemen
 
     if (overlay == null) return
 
+    const removeModal = () => {
+      overlay.setAttribute('hidden', 'true')
+      const modal = document.getElementById('modal')
+      if (modal) {
+        document.body.removeChild(modal)
+      }
+    }
+
     overlay.removeAttribute('hidden')
-    overlay.onclick = () => overlay.setAttribute('hidden', 'true')
+    overlay.onclick = removeModal
 
     const modal = document.createElement('div')
     const modalContainer = document.createElement('div')
-    const body = document.createElement('div')
+    const messageBody = document.createElement('div')
     const controls = document.createElement('div')
     const warning = document.createElement('p')
     const confirm = document.createElement('button')
     const cancel = document.createElement('button')
 
+    modal.id = 'modal'
     modal.classList.add('modal')
     modalContainer.classList.add('modal__container')
     controls.classList.add('modal__controls')
-    body.classList.add('modal__body')
+    messageBody.classList.add('modal__body')
     confirm.classList.add('modal__confirm', 'critical')
     cancel.classList.add('modal__cancel')
   
@@ -118,8 +127,32 @@ export const createRssOption = (rssMenu : HTMLElement, selectedFeed : HTMLElemen
     confirm.textContent = 'Delete'
     cancel.textContent = 'Cancel'
 
-    body.appendChild(warning)
-    modalContainer.append(body, controls)
+    cancel.onclick = removeModal
+
+    confirm.onclick = async () => {
+      try {
+        
+        const errorMessage = document.getElementById('delete-error')
+        if (errorMessage) errorMessage.remove()
+        
+        cancel.disabled = true
+        confirm.disabled = true
+
+        throw new Error()
+      } catch {
+        const errorContainer = document.createElement('p')
+        errorContainer.id = 'delete-error'
+        errorContainer.textContent = 'Failed to delete RSS feed. Please try again.'
+        messageBody.appendChild(errorContainer)
+      } finally {
+        confirm.disabled = false
+        cancel.disabled = false
+        // removeModal()
+      }
+    }
+
+    messageBody.appendChild(warning)
+    modalContainer.append(messageBody, controls)
     controls.append(cancel, confirm)
     modal.appendChild(modalContainer)
 
