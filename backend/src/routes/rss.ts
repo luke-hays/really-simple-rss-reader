@@ -1,6 +1,6 @@
 import express from 'express';
 import {JSDOM} from 'jsdom';
-import { ObjectId } from 'mongodb';
+import {ObjectId} from 'mongodb';
 
 const queryRssDocument = (rssFeed : Document | Element, selector : string) => {
   return rssFeed.querySelector(selector)?.textContent?.trim() ?? ''
@@ -60,6 +60,9 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
+    // check cache
+    console.log(req.cache)
+
     const collection = req.db.read(dbConfig)
     const id = new ObjectId(req.params.id)
   

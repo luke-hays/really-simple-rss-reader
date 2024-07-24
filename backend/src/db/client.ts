@@ -1,9 +1,8 @@
-import { MongoClient } from "mongodb";
+import {MongoClient} from "mongodb";
 
-//  docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $INSTANCE_ID For Local
 const connectionString = process.env.MONGODB_CONNECTION_STRING || "mongodb://localhost:27017";
 
-export class Client {
+export class DbClient {
   #client: MongoClient
 
   constructor() {
@@ -12,7 +11,7 @@ export class Client {
 
   async init() {
     await this.#client.connect()
-    console.log('Connected')
+    console.log('Connected to database.')
   }
 
   read({dbName, collectionName} : DbParams) {

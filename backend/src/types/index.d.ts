@@ -1,9 +1,11 @@
-import { Client } from "../db/client";
+import {DbClient} from "../db/client";
+import {CacheClient} from "../cache/client";
 
 declare global {
   namespace Express {
     interface Request {
-      db: Client
+      db: DbClient,
+      cache: CacheClient 
     }
   }
 }

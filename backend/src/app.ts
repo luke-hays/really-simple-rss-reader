@@ -1,15 +1,19 @@
 import express from 'express'
 import cors from 'cors'
 import routes from './routes/routes.js'
-import {Client} from './db/client.js'
+import {DbClient} from './db/client.js'
+import {CacheClient} from './cache/client.js'
 
 const app = express()
 const PORT = 3000
 
 // Create a database object and initialize a connection
 // Trying to keep this as encapsulated as possible
-const db = new Client()
+const db = new DbClient()
 await db.init()
+
+const cache = new CacheClient()
+await cache.init()
 
 // Mddleware to enable CORS
 // Simple Usage for this project - more documentation here. 
@@ -24,6 +28,7 @@ app.use(express.json())
 // This is to make things behave nicely with typescript
 app.use((req, _, next) => {
   req.db = db
+  req.cache = cache
   next()
 })
 
