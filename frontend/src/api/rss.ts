@@ -1,4 +1,4 @@
-import {getRequest, postRequest} from "./api";
+import {getRequest, postRequest, deleteRequest} from "./api";
 
 const BASE_PATH = 'rss'
 
@@ -41,6 +41,14 @@ export const addRssFeed = async (rssFeedSource: string) => {
 
     return rss
   } catch (error: any) {
+    throw error
+  }
+}
+
+export const deleteRssFeed = async (id : string) => {
+  try {
+    await deleteRequest({path: `${BASE_PATH}/${id}`})
+  }  catch (error: any) {
     throw error
   }
 }

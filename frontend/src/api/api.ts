@@ -22,3 +22,14 @@ export const postRequest = async ({path, options} : ApiRequest) => {
         throw error;
     }
 }
+
+export const deleteRequest = async ({path} : ApiRequest) => {
+    const options = {method: 'DELETE'}
+        
+    try {
+        const response = await fetch(`${BASE_PATH}/${path}`, options);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

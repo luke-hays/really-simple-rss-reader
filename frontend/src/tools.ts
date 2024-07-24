@@ -1,4 +1,4 @@
-import { getRssFeed } from "./api/rss"
+import { getRssFeed, deleteRssFeed } from "./api/rss"
 
 export const appendSpinner = (parent : HTMLElement, config? : {[key: string]: string}) => {
   const spinner = document.createElement('custom-spinner')
@@ -131,14 +131,17 @@ export const createRssOption = (rssMenu : HTMLElement, selectedFeed : HTMLElemen
 
     confirm.onclick = async () => {
       try {
-        
         const errorMessage = document.getElementById('delete-error')
         if (errorMessage) errorMessage.remove()
         
         cancel.disabled = true
         confirm.disabled = true
 
-        throw new Error()
+        await deleteRssFeed(item._id)
+
+        // Remove from options if successful
+        const option = document.getElementById(item._id)
+        option?.remove()
       } catch {
         const errorContainer = document.createElement('p')
         errorContainer.id = 'delete-error'
@@ -147,7 +150,7 @@ export const createRssOption = (rssMenu : HTMLElement, selectedFeed : HTMLElemen
       } finally {
         confirm.disabled = false
         cancel.disabled = false
-        // removeModal()
+        removeModal()
       }
     }
 
