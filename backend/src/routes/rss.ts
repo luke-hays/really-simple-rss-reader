@@ -106,4 +106,18 @@ router.post('/', async (req, res, next) => {
   }
 })
 
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const collection = req.db.read(dbConfig)
+    const id = new ObjectId(req.params.id)
+
+    await collection.deleteOne({_id: id})
+
+    res.send().status(200)
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+})
+
 export default router

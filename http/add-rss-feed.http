@@ -1,6 +1,0 @@
-POST http://localhost:3000/rss HTTP/2.0
-content-type: application/json
-
-{
-  "source": "https://news.ycombinator.com/rss"
-}
