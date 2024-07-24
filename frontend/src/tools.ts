@@ -90,6 +90,42 @@ export const createRssOption = (rssMenu : HTMLElement, selectedFeed : HTMLElemen
   rssDeleteButton.classList.add('rss-delete-option')
   rssDeleteButton.appendChild(rssDeleteButtonIcon)
 
+  // In the interest of time, not bothering with extracting modal code elsewhere
+  rssDeleteButton.onclick = () => {
+    const overlay = document.getElementById('overlay')
+
+    if (overlay == null) return
+
+    overlay.removeAttribute('hidden')
+    overlay.onclick = () => overlay.setAttribute('hidden', 'true')
+
+    const modal = document.createElement('div')
+    const modalContainer = document.createElement('div')
+    const body = document.createElement('div')
+    const controls = document.createElement('div')
+    const warning = document.createElement('p')
+    const confirm = document.createElement('button')
+    const cancel = document.createElement('button')
+
+    modal.classList.add('modal')
+    modalContainer.classList.add('modal__container')
+    controls.classList.add('modal__controls')
+    body.classList.add('modal__body')
+    confirm.classList.add('modal__confirm', 'critical')
+    cancel.classList.add('modal__cancel')
+  
+    warning.textContent = `Are you sure you want to delete ${item.title}?`
+    confirm.textContent = 'Delete'
+    cancel.textContent = 'Cancel'
+
+    body.appendChild(warning)
+    modalContainer.append(body, controls)
+    controls.append(cancel, confirm)
+    modal.appendChild(modalContainer)
+
+    document.body.appendChild(modal)
+  }
+
   rssOptionContainer.appendChild(rssOptionControl)
   rssOptionContainer.appendChild(rssDeleteButton)
   rssOption.appendChild(rssOptionContainer)

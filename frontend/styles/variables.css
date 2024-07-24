@@ -13,6 +13,10 @@
   --color-action-500: rgb(78, 52, 4);
 
   --color-action-subtle-100: rgb(253, 244, 227);
+  --color-subtle-100: rgb(234, 247, 255);
+
+  --color-critical-200: rgb(235, 69, 69);
+  --color-critical-300: rgb(189, 57, 57);
 
   --color-text-ink-100: rgb(255, 255, 255);
   --color-text-ink-200: rgb(221, 219, 219);
