@@ -25,18 +25,12 @@ selected-feed-error {
   list-style-type: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
   padding: 0;
 }
 
 .selected-feed ul li {
   height: 3rem;
-  width: 100%;
   padding: 0 1rem;
-}
-
-.selected-feed ul li:hover {
-  background-color: rgb(255, 239, 210);
 }
 
 .feed-item__link-container {
@@ -44,14 +38,15 @@ selected-feed-error {
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid gray;
-  padding: 8px 0;
-  color: rgb(36, 36, 36);
+  border-bottom: 1px solid var(--color-text-ink-200);
+  padding: .5rem 1rem;
+  color: var(--color-text-ink-400)
 }
 
 .feed-item__link-container:hover {
-  color: rgb(0, 0, 0);
-  border-color: black;
+  color: var(--color-text-ink-500);
+  background-color: var(--color-action-subtle-100);
+  border-color: var(--color-text-ink-300);
 }
 
 .feed-item__link {

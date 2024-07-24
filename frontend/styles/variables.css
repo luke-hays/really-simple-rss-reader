@@ -1,12 +1,22 @@
 :root {
-  --header-bg-color: black;
-  --header-font-color: white;
+  /*=============== COLOR ===============*/
+  --color-primary-100: rgb(90, 78, 141);
+  --color-primary-200: rgb(60, 48, 107);
+  --color-primary-300: rgb(23, 22, 80);
+  --color-primary-400: rgb(20, 13, 48);
+  --color-primary-500: rgb(12, 8, 27);
 
-  --footer-bg-color: black;
-  --footer-font-color: white;
+  --color-action-100: rgb(255, 200, 98);
+  --color-action-200: rgb(231, 162, 33);
+  --color-action-300: rgb(168, 111, 6);
+  --color-action-400: rgb(131, 87, 5);
+  --color-action-500: rgb(78, 52, 4);
 
-  --footer-button-font-color: white;
-  --footer-button-border: 1px solid white;
-  --footer-button-bg-color: black;
-  --footer-interactive-color: rgb(48, 48, 48)
+  --color-action-subtle-100: rgb(253, 244, 227);
+
+  --color-text-ink-100: rgb(255, 255, 255);
+  --color-text-ink-200: rgb(221, 219, 219);
+  --color-text-ink-300: rgb(139, 139, 139);
+  --color-text-ink-400: rgb(48, 48, 48);
+  --color-text-ink-500: rgb(0, 0, 0);
 }

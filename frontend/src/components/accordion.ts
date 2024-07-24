@@ -28,17 +28,19 @@ class CustomAccordion extends HTMLElement {
         justify-content: center;
         gap: 0.125rem;
         padding: 1rem 0;
-        background-color: var(--footer-interactive-color);
-        color: var(--footer-button-font-color);
+        background-color: var(--color-primary-300);
+        color: var(--color-text-ink-100);
         position: sticky;
         top: 0;
         width: 100%;
         border: none;
         height: 4rem;
+        font-size: 1rem;
       }
 
       .accordion-trigger:hover {
         cursor: pointer;
+        background-color: var(--color-primary-100);
       }
     `)
 

@@ -24,17 +24,11 @@ body {
   grid-template-rows: 5rem auto 5rem;
 }
 
-.overlay {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  background-color: rgb(32, 32, 32);
-}
-
 .layout-header {
   grid-area: header;
-  background-color: var(--header-bg-color);
-  color: var(--header-font-color)
+  background-color: var(--color-primary-300);
+  color: var(--color-text-ink-100);
+  border-bottom: 2px solid var(--color-primary-100);
 }
 
 /* Necessary to set display for height in main content with accordion */
@@ -46,8 +40,8 @@ body {
 
 .layout-footer {
   grid-area: footer;
-  background-color: var(--footer-bg-color);
-  color: var(--footer-font-color)
+  background-color: var(--color-primary-300);
+  color: var(--color-text-ink-100)
 }
 
 .site-title {
@@ -78,18 +72,19 @@ body {
 
 .github-link {
   text-decoration: none;
-  border: var(--footer-button-border);
+  border: 1px solid var(--color-primary-100);
+  background-color: var(--color-primary-200);
+  color: var(--color-text-ink-100);
   border-radius: 4px;
-  background-color: var(--footer-button-bg-color);
-  color: var(--footer-button-font-color);
   padding: .5rem;
 }
 
 .github-link:hover {
-  background-color: var(--footer-interactive-color);
+  background-color: var(--color-primary-100);
 }
 
 .github-link:active {
-  background-color: var(--footer-interactive-color);
-  transform: scale(.97)
+  background-color: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+  transform: scale(.97);
 }
