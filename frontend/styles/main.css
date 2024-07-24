@@ -1,3 +1,6 @@
 @import url('./shared.css');
-@import url('./rss-feed.css');
-@import url('./variables.css')
+@import url('./variables.css');
+
+@import url('./rss/selected-feed.css');
+@import url('./rss/add-feed.css');
+@import url('./rss/rss-options.css')

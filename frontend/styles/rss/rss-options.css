@@ -1,0 +1,47 @@
+
+/* Styling the accordion and items */
+
+div[slot='accordion-trigger'] h2 {
+  font-size: 1rem;
+}
+
+.feed-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.feed-item {
+  background-color: rgb(83, 83, 83);
+  color: white;
+}
+
+.feed-item button {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(83, 83, 83);
+  border: none;
+  color: lightgray;
+  padding: 4px 0;
+}
+
+.feed-item button:hover {
+  color: white;
+  cursor: pointer;
+  background-color: rgb(58, 58, 58);
+}
+
+.feed-menu {
+  position: sticky;
+  top: 0;
+}
+
+.feed-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 0;
+  height: 100%;
+}
