@@ -54,8 +54,6 @@ const getCacheExpirationTime = (cacheControl : string | null, rssTtl? : string |
     }
   }
 
-  console.log('cache expiration: ', expiration)
-
   return expiration
 }
 
@@ -87,7 +85,7 @@ router.get('/', async (req, res, next) => {
 
     res.json(rssFeeds)
   } catch (error) {
-    console.log(error)
+    console.error(error)
     next(error)
   }
 })
@@ -97,15 +95,12 @@ router.get('/:id', async (req, res, next) => {
     const cachedItems = await req.cache.get(req.params.id)
 
     if (cachedItems != null) {
-      console.log('Cache Hit')
       // RSS Feed items are cached as stringified JSON object
       const parsedItems = JSON.parse(cachedItems)
 
       res.json(parsedItems)
       return
     }
-
-    console.log('Cache Miss')
 
     const id = new ObjectId(req.params.id)
 
