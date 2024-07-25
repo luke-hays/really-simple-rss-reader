@@ -12,4 +12,16 @@ export class CacheClient {
       .on('error', err => console.log('Redis Client Error', err))
       .connect()
   }
+
+  async get(key : string) {
+    return await this.#client?.get(key)
+  }
+
+  async set(key : string, value : string, options : {[key : string]: number | string | boolean}) {
+    return await this.#client?.set(key, value, options)
+  }
+
+  async delete(key : string) {
+    await this.#client?.del(key)
+  }
 }

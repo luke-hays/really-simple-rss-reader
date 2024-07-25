@@ -1,6 +1,7 @@
 import express from 'express';
 import {JSDOM} from 'jsdom';
 import {ObjectId} from 'mongodb';
+import {CacheClient} from '../cache/client';
 
 const queryRssDocument = (rssFeed : Document | Element, selector : string) => {
   return rssFeed.querySelector(selector)?.textContent?.trim() ?? ''
@@ -18,6 +19,7 @@ const parseRss = (rssDocString : string) => {
 
   const title = document.querySelector('title')?.textContent
   const description = document.querySelector('description')?.textContent
+  const ttl = document.querySelector('ttl')?.textContent
 
   const items : Array<{title: string, description: string, source: string}> = []
 
@@ -29,7 +31,39 @@ const parseRss = (rssDocString : string) => {
     })
   })
 
-  return {title, description, items}
+  return {title, description, ttl, items}
+}
+
+const getCacheExpirationTime = (cacheControl : string | null, rssTtl? : string | null) => {
+  // Default to an hour
+  const DEFAULT_TIME = 3600
+  let expiration = DEFAULT_TIME
+
+  // If the rss provides a ttl we'll use that value first
+  if (rssTtl) {
+    // ttl element is in minutes in RSS spec
+    expiration = parseInt(rssTtl) * 60
+  }
+
+  // If the cache control is set to anything other than 0, then that will be the authoritative cache time
+  if (cacheControl) {
+    const match = cacheControl.match(/max-age=(\d+)/)
+    if (match) {
+      const time = parseInt(match[1])
+      expiration = time === 0 ? DEFAULT_TIME : time
+    }
+  }
+
+  console.log('cache expiration: ', expiration)
+
+  return expiration
+}
+
+// Cache the new rss feed's items
+// Expiration time should be set using either the Cache Control header from our response OR the TTL element from the rss doc
+// If these fail the default fallback is set to an hour
+const addFeedToCache = async (cache : CacheClient, key : string, value : string, ttl : number = 3600) => {
+    await cache.set(key, value, {EX: ttl})
 }
 
 // Can create a Router instance that can have middleware loaded and define routes
@@ -60,11 +94,22 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    // check cache
-    console.log(req.cache)
+    const cachedItems = await req.cache.get(req.params.id)
+
+    if (cachedItems != null) {
+      console.log('Cache Hit')
+      // RSS Feed items are cached as stringified JSON object
+      const parsedItems = JSON.parse(cachedItems)
+
+      res.json(parsedItems)
+      return
+    }
+
+    console.log('Cache Miss')
+
+    const id = new ObjectId(req.params.id)
 
     const collection = req.db.read(dbConfig)
-    const id = new ObjectId(req.params.id)
   
     const rss = await collection
       .findOne({_id: id})
@@ -74,7 +119,12 @@ router.get('/:id', async (req, res, next) => {
     const rssDoc = await fetch(rss.source)
     const body = await rssDoc.text()
 
-    const {items} = parseRss(body)
+    const {items, ttl} = parseRss(body)
+
+    const expiration = getCacheExpirationTime(rssDoc.headers.get('cache-control'), ttl)
+    
+    // Run the cache strategy again after fetching items for the feed
+    await addFeedToCache(req.cache, req.params.id, JSON.stringify(items), expiration)
 
     res.json(items)
   } catch (error) {
@@ -89,20 +139,25 @@ router.post('/', async (req, res, next) => {
     // https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
     // This is the only input provided, and in a real world scenario needs to be locked down tight
     
-    // TODO Validate Source
+    // TODO Validate Source https://validator.w3.org/feed/docs/soap.html
     const source = req.body['source']
     
     // If the source looks legit, we need to fetch some data from it to add to the database, like a title and description
     const rssDoc = await fetch(source)
+
     const body = await rssDoc.text()
 
-    const {title, description, items} = parseRss(body)
+    const {title, description, items, ttl} = parseRss(body)
 
     const newRssFeed = {title, description, source}
 
-    await req.db.insertRecord(dbConfig, newRssFeed)
+    const record = await req.db.insertRecord(dbConfig, newRssFeed)
 
-    // We'll go ahead and send this record back so that the UI can render the new RSS Feed
+    const expiration = getCacheExpirationTime(rssDoc.headers.get('cache-control'), ttl)
+
+    await addFeedToCache(req.cache, record.insertedId.toString(), JSON.stringify(items), expiration)
+
+    // Send this record back so that the UI can render the new RSS Feed
     res.send({...newRssFeed, items})
   } catch (error) {
     next(error)
@@ -115,6 +170,7 @@ router.delete('/:id', async (req, res, next) => {
     const id = new ObjectId(req.params.id)
 
     await collection.deleteOne({_id: id})
+    await req.cache.delete(req.params.id)
 
     res.send().status(200)
   } catch (error) {

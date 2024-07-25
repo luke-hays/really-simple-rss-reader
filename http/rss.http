@@ -4,7 +4,7 @@ GET http://localhost:3000/rss HTTP/2.0
 
 ### Get a feed and content
 
-GET http://localhost:3000/rss/66a0170dce04dbb45e468c0e HTTP/2.0
+GET http://localhost:3000/rss/66a297f2a1d87f43fa6a1ab5 HTTP/2.0
 
 ### Add an RSS feed to db
 
@@ -17,4 +17,4 @@ content-type: application/json
 
 ### Delete an RSS feed from db
 
-DELETE http://localhost:3000/rss/66a07ef474d7fc2d4c85ed27 HTTP/2.0
+DELETE http://localhost:3000/rss/66a29726d6976a371055a326 HTTP/2.0
