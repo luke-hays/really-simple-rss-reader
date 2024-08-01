@@ -2,6 +2,7 @@ import express from 'express';
 import {JSDOM} from 'jsdom';
 import {ObjectId} from 'mongodb';
 import {CacheClient} from '../cache/client';
+import validator from 'validator'
 
 // Parsing tool will be needed across functions
 const dom = new JSDOM()
@@ -147,14 +148,13 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    // Check if valid source. Insert into table if valid
-    // https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
-    // This is the only input provided, and in a real world scenario needs to be locked down tight
     const source = req.body['source']
 
-    const validUrl = await validateRssUrl(source)
+    const validUrl = validator.isURL(source)
+    if (!validUrl) throw new Error('Invalid URL')
 
-    if (!validUrl) throw new Error('Invalid RSS format')
+    const validRss = await validateRssUrl(source)
+    if (!validRss) throw new Error('Invalid RSS format')
 
     const {title, description, items, expiration} = await parseRss(source)
 
